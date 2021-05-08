@@ -1,18 +1,50 @@
 <template>
-    <v-container  style="height=:100vh;"> 
-        <v-list  style="height=:100vh;">
-            <v-list-item-group class="d-flex flex-column fill-height">
-                <v-list-item>객체 탐지</v-list-item>
-                <v-list-item>변화 탐지</v-list-item>
-                <v-list-item class="mt-auto">보고서 작성</v-list-item>
-            </v-list-item-group>
-        </v-list>
-        
+    <v-container class="blue-grey lighten-5" fill-height> 
+        <v-row class="fill-height" align="start" >
+            <v-col sm="12">
+                <v-row>
+                    <v-col sm="12" align="center">
+                        <v-btn icon @click="changeType('object')">
+                            <v-icon>mdi-feature-search-outline</v-icon>
+                        </v-btn>
+                    </v-col>
+                    <v-col sm="12" align="center">
+                        <v-btn icon @click="changeType('diff')">
+                            <v-icon>mdi-compare</v-icon>
+                        </v-btn>
+                    </v-col>
+                </v-row>
+            </v-col>
+            
+            <v-col sm="12">
+                <v-row class="fill-height d-flex align-end">
+                    <v-col sm="12" align="center" class="mt-auto">
+                        <v-btn icon>
+                            <v-icon>mdi-file-chart</v-icon>
+                        </v-btn>
+                    </v-col>
+                </v-row>
+            </v-col>
+        </v-row>        
     </v-container>
 </template>
 
+<script>
+
+export default ({
+    methods:{
+        changeType(param){
+            this.$emit('changeType',param);
+        }
+    }
+})
+</script>
+
+
 <style scoped>
-v-contaimer{
-    height:500px
+
+
+.container{
+    background-color: lightgray;
 }
 </style>

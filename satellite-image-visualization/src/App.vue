@@ -1,16 +1,25 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col sm="12"><Header></Header></v-col>
-      <v-col sm="2"><Sidebar></Sidebar></v-col>
-      <v-col sm="10"><Map></Map></v-col>
-      <v-col sm="12"><Footer></Footer></v-col>
-    </v-row>
-  </v-container>
+  <v-app>
+    <v-container fluid>
+      <v-row>
+        <v-col sm="12 pa-0"><Header></Header></v-col>
+        <v-col sm="1 pa-0"><Sidebar @changeType="val=>this.type=val"></Sidebar></v-col>
+        
+        <v-col sm="11 pa-0">
+          <Map v-if="type === 'object'"></Map>
+          <DualMap v-else></DualMap>
+        </v-col>
+        <v-col sm="12 pa-0"><Footer></Footer></v-col>
+      </v-row>
+    </v-container>
+  </v-app>
+  
 </template>
 
 <script>
 import Map from './components/Map';
+import DualMap from './components/DualMap';
+// import Main from './components/Main';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -19,12 +28,16 @@ export default {
   name: 'App',
 
   components: {
-    Map,Sidebar,Header,Footer
+    DualMap,Map,Sidebar,Header,Footer
   },
 
   data: () => ({
-    //
+    type: 'object'
   }),
+
+  methods:{
+
+  }
 };
 </script>
 
@@ -36,7 +49,7 @@ export default {
     font-style: normal;
 }
 
-body{
+*{
   font-family: 'twayair', Arial, Helvetica, sans-serif;
 }
 </style>
@@ -45,6 +58,9 @@ body{
 h1{
   text-align: center;
 }
-
+/* 
+*{
+  padding:0;
+} */
 
 </style>

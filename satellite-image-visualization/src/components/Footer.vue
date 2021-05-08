@@ -1,10 +1,14 @@
 <template>
-    <v-footer>Hello World</v-footer>
+    <v-footer padless="padless">
+        <v-card flat tile width="100%">
+            <p class="text-center">Satellite Image Visualization</p>
+        </v-card>
+    </v-footer>      
 </template>
 
 
 <style scoped>
-div{
-    text-align: center;
+.footer{
+    margin: auto;
 }
 </style>
