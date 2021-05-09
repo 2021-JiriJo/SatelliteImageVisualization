@@ -3,11 +3,21 @@
     <v-container fluid>
       <v-row>
         <v-col sm="12 pa-0"><Header></Header></v-col>
-        <v-col sm="1 pa-0"><Sidebar @changeType="val=>this.type=val"></Sidebar></v-col>
+        <v-col sm="1 pa-0"><Sidebar @changeType="changeType"></Sidebar></v-col>
         
         <v-col sm="11 pa-0">
-          <Map v-if="type === 'object'"></Map>
-          <DualMap v-else></DualMap>
+          <Map
+            v-if="type === 'object'" 
+            v-bind:position="position"
+            v-bind:zoom="zoom"
+            @changePosition="changePosition"
+          ></Map>
+          <DualMap  
+            v-else 
+            v-bind:position="position"
+            v-bind:zoom="zoom"
+            @changePosition="changePosition"
+          ></DualMap>
         </v-col>
         <v-col sm="12 pa-0"><Footer></Footer></v-col>
       </v-row>
@@ -24,6 +34,8 @@ import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Footer from './components/Footer';
 
+import {fromLonLat, toLonLat} from 'ol/proj';
+
 export default {
   name: 'App',
 
@@ -32,11 +44,24 @@ export default {
   },
 
   data: () => ({
-    type: 'object'
+    type: 'object',
+    longitude: 127,
+    latitude: 37,
+    zoom: 5
   }),
-
+  computed:{
+    position: function(){
+      return fromLonLat([this.longitude,this.latitude]);
+    },
+  },
   methods:{
-
+    changeType(val){
+      this.type=val;
+    },
+    changePosition(center, zoom){
+      [this.longitude, this.latitude] = toLonLat(center);
+      this.zoom = zoom;
+    }  
   }
 };
 </script>

@@ -14,6 +14,10 @@ import OSM from 'ol/source/OSM';
 
 export default {
   name: 'Main',
+  props:{
+    position: {type:Array, default:null},
+    zoom: {type:Number, default: 0}
+  },
   data(){
     return {
       view: null,
@@ -31,8 +35,8 @@ export default {
       });
 
       this.view = new View({
-        center: [0,0],
-        zoom: 5
+        center: this.position,
+        zoom: this.zoom
       });
 
       this.map = new Map({
@@ -40,9 +44,15 @@ export default {
         view: this.view,
         target: 'map'
       });
+
+      this.map.on('moveend', ()=>{
+        this.$emit('changePosition',this.view.getCenter(), this.view.getZoom());
+      });
     }
   }
 }
+
+
 </script>
 
 <style scoped>
