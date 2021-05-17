@@ -1,8 +1,8 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <v-row>
-      <v-col sm="6"><div class="map" id="map1"></div></v-col>
-      <v-col sm="6"><div class="map" id="map2"></div></v-col>
+      <v-col sm="6" class="pa-0"><div class="map" id="map1"></div></v-col>
+      <v-col sm="6" class="pa-0"><div class="map" id="map2"></div></v-col>
     </v-row>
   </v-container>
 
@@ -79,6 +79,6 @@ export default {
 
 <style scoped>
 .map{
-  height:500px
+  height:80vh;
 }
 </style>
