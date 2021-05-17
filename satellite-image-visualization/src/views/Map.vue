@@ -34,19 +34,17 @@ export default {
     zoom: {type:Number, default: 0},
     info: {
       type:Object,
-      default:{
-        type:'plane',
-        date:'20210121'
+      default:()=>{
+        return {
+          type:'plane',
+          date:'20210121'
+        }
       }
     }
   },
   watch:{
     info(){
       if(this.info != null){
-        for(let layer in this.print_info){
-          this.map.removeLayer(this.print_info[layer]);
-          this.print_info[layer] = null;
-        }
         this.load_geo();
         this.load_img();
       }
@@ -124,6 +122,9 @@ export default {
         })
       }
 
+      if(this.imageOutlineLayer != null)
+        this.map.removeLayer(this.imageOutlineLayer);
+
       this.imageOutlineLayer = new VectorLayer({
         source: new VectorSource({
           features: [new Feature(new Polygon(getBorder(TL,BR)))]
@@ -133,6 +134,9 @@ export default {
       });
       this.map.addLayer(this.imageOutlineLayer);
       
+      if(this.imageLayer != null)
+        this.map.removeLayer(this.imageLayer);
+
       this.imageLayer = new ImageLayer({
         source: new Static({
           url: `http://localhost:3000/map/${this.info.date}/${this.info.type}`,
@@ -151,6 +155,10 @@ export default {
         let source = new VectorSource({
           features: new GeoJSON({featureProjection:"EPSG:3857"}).readFeatures(res.data),
         });
+
+        if(this.objectInfoLayer != null)
+          this.map.removeLayer(this.objectInfoLayer);
+
         this.objectInfoLayer = new VectorLayer({
           source: source,
           visible: true
