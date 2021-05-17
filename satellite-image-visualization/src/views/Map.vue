@@ -43,6 +43,10 @@ export default {
   watch:{
     info(){
       if(this.info != null){
+        for(let layer in this.print_info){
+          this.map.removeLayer(this.print_info[layer]);
+          this.print_info[layer] = null;
+        }
         this.load_geo();
         this.load_img();
       }
@@ -51,13 +55,12 @@ export default {
   data(){
     return {
       view: null,
-      vector: null,
       map: null,
-      print_info:{
-        img:null,
-        geo:null
-      },
-      minZoomFeatureInfo: 10
+      imageOutlineLayer: null,
+      imageLayer: null,
+      objectInfoLayer: null,
+      minZoomFeatureInfo: 10,
+
     };
   },
   mounted() {
@@ -84,6 +87,7 @@ export default {
       });
       
       if(this.info != null){
+        
         this.load_geo();
         this.load_img();
       }
@@ -94,8 +98,6 @@ export default {
     },
 
     load_img(){
-      const map_dir = `http://localhost:3000/map/${this.info.date}/${this.info.type}`;
-
       const TL = fromLonLat([126.42289638519286, 37.443824358499114]);
       const BR = fromLonLat([126.46053314208984, 37.47451749927094]);
       var extent = TL.concat(BR);
@@ -122,48 +124,38 @@ export default {
         })
       }
 
-      let imageOutlineLayer = new VectorLayer({
+      this.imageOutlineLayer = new VectorLayer({
         source: new VectorSource({
           features: [new Feature(new Polygon(getBorder(TL,BR)))]
         }),
         style: blueBoldStyle,
         minZoom: this.minZoomFeatureInfo
       });
-      this.map.addLayer(imageOutlineLayer);
+      this.map.addLayer(this.imageOutlineLayer);
       
-      const imageLayer = new ImageLayer({
+      this.imageLayer = new ImageLayer({
         source: new Static({
-          url: map_dir,
+          url: `http://localhost:3000/map/${this.info.date}/${this.info.type}`,
           imageExtent : extent
         }),
         minZoom: this.minZoomFeatureInfo
       });
-      this.map.addLayer(imageLayer);
+      this.map.addLayer(this.imageLayer);
 
       this.view.setCenter(getCenter(extent));
       this.view.setZoom(this.minZoomFeatureInfo);
     },
 
     load_geo(){
-      const info_dir = `http://localhost:3000/info/${this.info.date}/${this.info.type}`;
-      console.log(info_dir);
-      axios.get(info_dir).then(res=>{
-        const geo = res.data;
-        console.log(geo);
-
+      axios.get(`http://localhost:3000/info/${this.info.date}/${this.info.type}`).then(res=>{
         let source = new VectorSource({
-          features: new GeoJSON({featureProjection:"EPSG:3857"}).readFeatures(geo),
+          features: new GeoJSON({featureProjection:"EPSG:3857"}).readFeatures(res.data),
         });
-        console.log(source);
-
-        this.vector = new VectorLayer({
+        this.objectInfoLayer = new VectorLayer({
           source: source,
           visible: true
         });
-        console.log(this.vector);
-        this.map.addLayer(this.vector);
-
-        console.log(geo);
+        this.map.addLayer(this.objectInfoLayer);
       });
     }
   }
