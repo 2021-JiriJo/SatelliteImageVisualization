@@ -42,7 +42,7 @@ import axios from 'axios';
 
 export default ({
     created(){
-        axios.get('http://localhost:3000/objects')
+        axios.get('http://192.168.0.2:3000/objects')
             .then(res=>this.items=res.data);
     },
     data(){
