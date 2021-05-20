@@ -43,12 +43,18 @@ export default {
     }
   },
   watch:{
-    info(){
-      if(this.info != null){
+
+    '$route'(to){
+      
+      if(to.path == '/map'){
+
         this.load_geo();
         this.load_img();
+
       }
     }
+
+
   },
   data(){
     return {
@@ -58,6 +64,7 @@ export default {
       imageLayer: null,
       objectInfoLayer: null,
       minZoomFeatureInfo: 10,
+
 
     };
   },
@@ -84,11 +91,6 @@ export default {
         target: 'map'
       });
       
-      if(this.info != null){
-        
-        this.load_geo();
-        this.load_img();
-      }
 
       this.map.on('moveend', ()=>{
         this.$emit('changePosition',this.view.getCenter(), this.view.getZoom());
