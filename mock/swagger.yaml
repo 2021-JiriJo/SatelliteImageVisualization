@@ -135,13 +135,13 @@ paths:
           description: "Same Data"
         "404":
           description: "Not found"    
-  /diff/map/{date_from}/{date_to}:
+  /diff/map/{date_from}/{date_to}/from:
     get:
       tags:
       - "diff"
       summary: "변화 탐지 사진"
       description: ""
-      operationId: "getDiffInfo"
+      operationId: "getFromMap"
       consumes:
       - "application/json"
       produces:
@@ -160,7 +160,35 @@ paths:
       responses:
         "200":
           description: "Success (PNG 이미지를 데이터로 받음)"
-          
+        "404":
+          description: "Not found"
+  /diff/map/{date_from}/{date_to}/to:
+    get:
+      tags:
+      - "diff"
+      summary: "변화 탐지 사진"
+      description: ""
+      operationId: "getToMap"
+      consumes:
+      - "application/json"
+      produces:
+      - image/png
+      parameters:
+      - name: date_from
+        in: path
+        description: "변화 탐지를 위한 이전 날짜"
+        required: true
+        type: string
+      - name: date_to
+        in: path
+        description: "변화 탐지를 위한 이후 날짜"
+        required: true
+        type: string
+      responses:
+        "200":
+          description: "Success (PNG 이미지를 데이터로 받음)"        
+        "404":
+          description: "Not found"         
   /diff/info/{date_from}/{date_to}:
     get:
       tags:

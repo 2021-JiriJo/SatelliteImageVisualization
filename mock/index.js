@@ -4,8 +4,13 @@ import swaggerUi from 'swagger-ui-express';
 import cors from 'cors';
 import path from 'path';
 import fs from 'fs';
+import logger from 'morgan';
+
 
 const app = express();
+app.use(cors());
+app.use(logger('dev'));
+
 const __dirname = path.resolve();
 
 app.get('/object/objects', (req, res)=>{
@@ -34,51 +39,43 @@ app.get('/diff/date', (req, res)=>{
     ]);
 });
 
-app.get('/diff/map/:date_from/:date_to', (req, res)=>{
-    return res.sendFile(path.join(__dirname, `./data/map_${req.params.date}_${req.params.object}.png`));
+app.get('/diff/map/:date_from/:date_to/from', (req, res)=>{
+    return res.sendFile(path.join(__dirname, `./data/diff/map_${req.params.date_from}_${req.params.date_to}_1.png`));
+});
+
+app.get('/diff/map/:date_from/:date_to/to', (req, res)=>{
+    return res.sendFile(path.join(__dirname, `./data/diff/map_${req.params.date_from}_${req.params.date_to}_2.png`));
 });
 
 app.get('/diff/info/:date_from/:date_to', (req, res)=>{
-    return res.sendFile(path.join(__dirname, `./data/map_${req.params.date}_${req.params.object}.png`));
+    const geojson = fs.readFileSync(`./data/diff/map_${req.params.date_from}_${req.params.date_to}.geojson`);
+    const extent1 = fs.readFileSync(`./data/diff/map_${req.params.date_from}_${req.params.date_to}_1.json`);
+    const extent2 = fs.readFileSync(`./data/diff/map_${req.params.date_from}_${req.params.date_to}_2.json`);
+
+    return res.json({
+        extent1: JSON.parse(extent1),
+        extent2: JSON.parse(extent2),
+        geojson: JSON.parse(geojson)
+    });
 });
 
 
-// app.listen(3000,()=>{
-//     app.use(cors());
-//     console.log('Mock Server On');
-// });
-
-
-
-
-// Swagger definition
-// You can set every attribute except paths and swagger
-// https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md
-var swaggerDefinition = {
-  info: { // API informations (required)
-    title: 'Satellite Visualization', // Title (required)
-    version: '1.0.0', // Version (required)
-    description: 'For Simple Test', // Description (optional)
+const swaggerDefinition = {
+  info: { 
+    title: 'Satellite Visualization',
+    version: '1.0.0',
+    description: 'For Simple Test',
   },
-  host: 'localhost:3000', // Host (optional)
+  host: 'localhost:3000',
 }
-
-// Options for the swagger docs
-var options = {
-  // Import swaggerDefinitions
+const options = {
   swaggerDefinition: swaggerDefinition,
-  // Path to the API docs
   apis: ['./swagger.yaml'],
 }
-
-
-
-
 const swaggerSpec = await swaggerJSDoc(options);
-
 app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+
 app.listen(3000,()=>{
-        app.use(cors());
         console.log('Mock Server On');
 });
