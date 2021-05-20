@@ -3,21 +3,17 @@
     <v-container fluid>
       <v-row>
         <v-col sm="12 pa-0"><Header></Header></v-col>
-        <v-col sm="1 pa-0"><Sidebar @changeType="changeType"></Sidebar></v-col>
-        
-        <v-col sm="11 pa-0">
-          <Map
-            v-if="type === 'object'" 
-            v-bind:position="position"
-            v-bind:zoom="zoom"
+        <v-col sm="2 pa-0">
+          <Sidebar/>
+        </v-col>
+        <v-col sm="10 pa-0">
+          <router-view
+            v-if="hasMap()"
+            :position="position"
+            :zoom="zoom"
             @changePosition="changePosition"
-          ></Map>
-          <DualMap  
-            v-else 
-            v-bind:position="position"
-            v-bind:zoom="zoom"
-            @changePosition="changePosition"
-          ></DualMap>
+          ></router-view>
+          <router-view v-else></router-view>
         </v-col>
         <v-col sm="12 pa-0"><Footer></Footer></v-col>
       </v-row>
@@ -27,9 +23,6 @@
 </template>
 
 <script>
-import Map from './components/Map';
-import DualMap from './components/DualMap';
-// import Main from './components/Main';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -40,11 +33,10 @@ export default {
   name: 'App',
 
   components: {
-    DualMap,Map,Sidebar,Header,Footer
+    Sidebar, Header,Footer
   },
 
   data: () => ({
-    type: 'object',
     longitude: 127,
     latitude: 37,
     zoom: 5
@@ -52,7 +44,7 @@ export default {
   computed:{
     position: function(){
       return fromLonLat([this.longitude,this.latitude]);
-    },
+    }
   },
   methods:{
     changeType(val){
@@ -61,7 +53,11 @@ export default {
     changePosition(center, zoom){
       [this.longitude, this.latitude] = toLonLat(center);
       this.zoom = zoom;
-    }  
+    },
+    hasMap: function(){
+      const x = document.location.href.split(/\//g).pop();
+      return x.includes('map') || x=='' ;
+    }
   }
 };
 </script>
@@ -88,4 +84,9 @@ h1{
   padding:0;
 } */
 
+#addside{
+    position:absolute;
+    left: 200px;
+    top: 100px;
+}
 </style>
