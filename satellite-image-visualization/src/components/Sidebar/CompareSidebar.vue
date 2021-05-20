@@ -6,7 +6,7 @@
                         변화 탐지
                     </v-list-item-title>
                 </v-list-item-content>
-                <v-list-item-icon class="text-center" @click="clickMenu('home')">
+                <v-list-item-icon class="text-center" @click="clickHome">
                     <v-btn icon class="text-center" >
                         <v-icon>mdi-arrow-left</v-icon>
                     </v-btn>
@@ -25,7 +25,7 @@
                     </v-list-item-content>
                 </v-list-item>
             </v-list>
-            <v-btn class="ma-1" @click="clickMenu('home')" to="/dualmap">선택</v-btn>
+            <v-btn class="ma-1" @click="clickSelect()">선택</v-btn>
         </v-navigation-drawer>
 </template>
 
@@ -45,9 +45,22 @@ export default ({
         };
     },
     methods:{
-        clickMenu(to){
-            console.log(to);
-            this.$emit('clickMenu', to);
+        clickHome(){
+            this.$emit('clickMenu','home');
+        },
+        clickSelect(){
+            if(this.selected_from == null || this.selected_to == null){
+                alert('날짜를 모두 선택하세요');
+                return;
+            }
+            else if(this.selected_from == this.selected_to){
+                alert('다른 날짜를 선택하세요');
+                return;
+            }
+            this.$emit('clickMenu', 'home');
+            this.selected_from = this.selected_from.replaceAll('-','');
+            this.selected_to = this.selected_to.replaceAll('-','');
+            this.$router.push(`/dualmap?date_from=${this.selected_from}&date_to=${this.selected_to}`);
         }
     }
 })

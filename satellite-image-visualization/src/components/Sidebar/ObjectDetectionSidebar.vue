@@ -6,16 +6,15 @@
                     객체 탐지
                 </v-list-item-title>
             </v-list-item-content>
-            <v-list-item-icon class="text-center" @click="clickMenu('home')">
+            <v-list-item-icon class="text-center" @click="clickHome">
                 <v-btn icon class="text-center" >
                     <v-icon>mdi-arrow-left</v-icon>
                 </v-btn>
             </v-list-item-icon>
-                
-            
-            
         </v-list-item>
         <v-divider></v-divider>
+
+
         <v-list flat dense>
             <v-list-item-group 
                 v-model="selected_item"
@@ -24,6 +23,7 @@
                 <v-list-item 
                     v-for="item in items"
                     :key="item"
+                    :value="item"
                 >
                     <v-list-item-content>
                         <v-list-item-title v-text="item"></v-list-item-title>
@@ -33,7 +33,7 @@
             </v-list-item-group>
             
         </v-list>
-        <v-btn class="ma-1" @click="clickMenu('home')" to="/map">선택</v-btn>
+        <v-btn class="ma-1" @click="clickSelect">선택</v-btn>
     </v-navigation-drawer>
 </template>
 
@@ -42,19 +42,41 @@ import axios from 'axios';
 
 export default ({
     created(){
-        axios.get('http://localhost:3000/objects')
+        axios.get('http://localhost:3000/object/objects')
             .then(res=>this.items=res.data);
     },
     data(){
         return {
             selected_item: null,
-            items: null
+            selected_object: null,
+            items: null,
+            datatype: 'object'
         };
     },
     methods:{
-        clickMenu(to){
-            console.log(to);
-            this.$emit('clickMenu', to);
+        clickHome(){
+            this.$emit('clickMenu','home');
+        },
+        clickSelect(){
+            if(this.selected_item == null){
+                alert("select item");
+                return;
+            }
+            else if(this.datatype == 'object'){
+                axios.get(`http://localhost:3000/object/${this.selected_item}/date`)
+                    .then(res=>{
+                        console.log('res');
+                        this.datatype = 'date';
+                        this.items=res.data;
+                        this.selected_object = this.selected_item;
+                        this.selected_item = null;
+                    });
+            }
+            else{
+                this.selected_item = this.selected_item.replaceAll('-','');
+                this.$emit('clickMenu', 'home');
+                this.$router.push(`/map?type=${this.selected_object}&date=${this.selected_item}`);
+            }
         }
     }
 })
