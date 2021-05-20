@@ -14,7 +14,7 @@ basePath: "/"
 tags:
 - name: "object"
   description: "객체 식별 정보"
-- name: "diff"
+- name: "compare"
   description: "변화 탐지 정보"
 schemes:
 - "http"
@@ -46,6 +46,37 @@ paths:
           description: "Same Data"
         "404":
           description: "Not found"
+  /object/{object}/date:
+    get:
+      tags:
+      - "object"
+      summary: "변화 탐지한 날짜"
+      description: ""
+      operationId: "getObjectDate"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: object
+        in: path
+        description: "대상 객체"
+        required: true
+        type: string
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            type: "array"
+            items: 
+              type: "string"
+            default:
+              - "20210122"
+              - "20210123"
+        "304":
+          description: "Same Data"
+        "404":
+          description: "Not found"             
   /object/map/{date}/{object}:
     get:
       tags:
@@ -109,13 +140,13 @@ paths:
               geojson:
                 type: object
                 default: {"foo":"bar"}
-  /diff/date:
+  /compare/date:
     get:
       tags:
-      - "diff"
+      - "compare"
       summary: "변화 탐지한 날짜"
       description: ""
-      operationId: "getDiffDate"
+      operationId: "getCompareDate"
       consumes:
       - "application/json"
       produces:
@@ -135,10 +166,10 @@ paths:
           description: "Same Data"
         "404":
           description: "Not found"    
-  /diff/map/{date_from}/{date_to}/from:
+  /compare/map/{date_from}/{date_to}/from:
     get:
       tags:
-      - "diff"
+      - "compare"
       summary: "변화 탐지 사진"
       description: ""
       operationId: "getFromMap"
@@ -162,10 +193,10 @@ paths:
           description: "Success (PNG 이미지를 데이터로 받음)"
         "404":
           description: "Not found"
-  /diff/map/{date_from}/{date_to}/to:
+  /compare/map/{date_from}/{date_to}/to:
     get:
       tags:
-      - "diff"
+      - "compare"
       summary: "변화 탐지 사진"
       description: ""
       operationId: "getToMap"
@@ -189,13 +220,13 @@ paths:
           description: "Success (PNG 이미지를 데이터로 받음)"        
         "404":
           description: "Not found"         
-  /diff/info/{date_from}/{date_to}:
+  /compare/info/{date_from}/{date_to}:
     get:
       tags:
-      - "diff"
+      - "compare"
       summary: "변화 탐지 정보"
       description: ""
-      operationId: "getDiffImage"
+      operationId: "getCompareImage"
       consumes:
       - "application/json"
       produces:
