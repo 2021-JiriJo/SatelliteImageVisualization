@@ -17,6 +17,7 @@ import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
 import XYZ from 'ol/source/XYZ';
 // import OSM from 'ol/source/OSM';
+import axios from 'axios';
 
 export default {
   name: 'DualMap',
@@ -29,11 +30,46 @@ export default {
     return {
       view: null,
       map1: null,
-      map2: null
+      map2: null,
+
+      date_from: null,
+      date_to: null,
+      from_png: null,
+      to_png: null,
+      json: null
     };
   },
   mounted() {
     this.init();
+  },
+  watch:{
+    '$route'(from){
+      if(from.path == '/dualmap'){
+        this.date_from = this.$route.query.date_from;
+        this.date_to = this.$route.query.date_to;
+
+        axios.get(`http://localhost:3000/compare/map/${this.date_from}/${this.date_to}/from`)
+        .then(res=>{
+          this.from_png = res.data;
+          //TileLayer 생성, map에 addlayer로 오버레이
+        });
+
+        axios.get(`http://localhost:3000/compare/map/${this.date_from}/${this.date_to}/to`)
+        .then(res=>{
+          this.to_png = res.data;
+          //TileLayer 생성, map에 addlayer로 오버레이
+
+        });
+
+        axios.get(`http://localhost:3000/compare/info/${this.date_from}/${this.date_to}`)
+        .then(res=>{
+          this.json = res.data;
+          //json 데이터 TileLayer 생성, map에 오버레이
+          //extent1, extent2, geojson
+        });
+        
+      }
+    }
   },
   methods:{
     init(){
@@ -76,7 +112,9 @@ export default {
       this.map2.on('moveend', ()=>{
         this.$emit('changePosition',this.view.getCenter(), this.view.getZoom());
       });
-    }
+    },
+
+
   }
 }
 </script>
