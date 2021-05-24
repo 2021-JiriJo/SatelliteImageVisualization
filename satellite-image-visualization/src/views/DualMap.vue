@@ -58,11 +58,9 @@ export default {
   },
   watch:{
     '$route'(from){
-      if(from.path == '/dualmap'){
-        this.date_from = this.$route.query.date_from;
-        this.date_to = this.$route.query.date_to;
-        this.load_data();
-      }
+      this.date_from = this.$route.query.date_from;
+      this.date_to = this.$route.query.date_to;
+      this.load_data();
     }
   },
   methods:{
