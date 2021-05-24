@@ -26,10 +26,10 @@ export default {
     zoom: {type:Number, default: 0},
   },
   watch: {
-    '$route' (to) {
+    '$route' (from) {
       this.info.type = to.query.type;
       this.info.date = to.query.date;
-      //this.load_data();
+      this.load_data();
     }
   },
   data(){
