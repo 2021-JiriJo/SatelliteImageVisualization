@@ -27,8 +27,8 @@ export default {
   },
   watch: {
     '$route' (from) {
-      this.info.type = to.query.type;
-      this.info.date = to.query.date;
+      this.info.type = from.query.type;
+      this.info.date = from.query.date;
       this.load_data();
     }
   },
