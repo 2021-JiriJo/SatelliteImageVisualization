@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer fill-height> 
+    <v-navigation-drawer fill-height class="d-sm-inline"> 
         <v-list-item>
             <v-list-item-content>
                 <v-list-item-title>
@@ -74,8 +74,7 @@ export default ({
             }
             else{
                 this.selected_item = this.selected_item.replaceAll('-','');
-                this.$emit('clickMenu', 'home');
-                this.$router.push(`/map?type=${this.selected_object}&date=${this.selected_item}`);
+                this.$emit('clickMenu', 'home',{path:'map', query:{type: this.selected_object, date : this.selected_item }});
             }
         }
     }

@@ -4,6 +4,13 @@ import Map from '../views/Map.vue';
 
 Vue.use(VueRouter)
 
+const originalPush = VueRouter.prototype.push;
+VueRouter.prototype.push = function push(location) {
+	return originalPush.call(this, location).catch(err => {
+		if (err.name !== 'NavigationDuplicated') throw err;
+	});
+};
+
 const routes = [
   {
     path: '',
@@ -37,6 +44,10 @@ const routes = [
   {
     path: '/home',
     component: () => import('../views/Home.vue') 
+  },
+  {
+    path: '/stat',
+    component: () => import('../views/Stat.vue') 
   }
   // {
   //   path: '/map',

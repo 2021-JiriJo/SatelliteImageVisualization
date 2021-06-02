@@ -1,7 +1,5 @@
 <template>
-  <div>
     <div id="map"></div>
-  </div>
 </template>
 
 <script>
@@ -18,7 +16,6 @@ import Feature from 'ol/Feature';
 import Polygon from 'ol/geom/Polygon';
 import GeoJSON from 'ol/format/GeoJSON';
 import axios from 'axios';
-
 export default {
   name: 'Map',
   props:{
@@ -27,9 +24,9 @@ export default {
     zoom: {type:Number, default: 0},
   },
   watch: {
-    '$route' (from) {
-      this.info.type = from.query.type;
-      this.info.date = from.query.date;
+    '$route' (to) {
+      this.info.type = to.query.type;
+      this.info.date = to.query.date;
       this.load_data();
     }
   },
@@ -48,9 +45,24 @@ export default {
     };
   },
   mounted() {
-    this.init();
+    setTimeout(()=>{this.init();},100);
+    
   },
   methods:{
+    resetLayer(){
+      if(this.objectInfoLayer != null){
+          this.map.removeLayer(this.objectInfoLayer);
+          this.objectInfoLayer = null;
+      }
+      if(this.imageOutlineLayer != null){
+          this.map.removeLayer(this.imageOutlineLayer);
+          this.imageOutlineLayer = null;
+      }
+      if(this.imageLayer != null){
+          this.map.removeLayer(this.imageLayer);
+          this.imageLayer = null;
+      }
+    },
     init(){
       let tileLayer = new TileLayer({
         source: new XYZ({
@@ -79,7 +91,8 @@ export default {
       });
     },
     load_data(){
-      axios.get(`http://localhost:3000/object/info/${this.info.date}/${this.info.type}`).then(res=>{
+      axios.get(`http://localhost:3000/object/info/${this.info.date}/${this.info.type}`)
+      .then(res=>{
         let extent = res.data.extent;
         const TL = fromLonLat([extent[0],extent[1]]);
         const BR = fromLonLat([extent[2],extent[3]]);
@@ -87,6 +100,11 @@ export default {
         this.render_outline(TL,BR);
         this.render_img(extent);
         this.render_info(res.data.geojson);
+      })
+      .catch(err=>{
+        console.log(err);
+        this.resetLayer();
+        this.$emit('raiseError');
       });
     },
     render_info(geojson){
@@ -105,16 +123,25 @@ export default {
       console.log(extent);
       if(this.imageLayer != null)
         this.map.removeLayer(this.imageLayer);
-      this.imageLayer = new ImageLayer({
-        source: new Static({
-          url: `http://localhost:3000/object/map/${this.info.date}/${this.info.type}`,
-          imageExtent : extent
-        }),
-        minZoom: this.minZoomFeatureInfo
-      });
-      this.map.addLayer(this.imageLayer);
-      this.view.setCenter(getCenter(extent));
-      this.view.setZoom(this.minZoomFeatureInfo);
+      try{
+        console.log('ee')
+        const imageStatic = new Static({
+            url: `http://localhost:3000/object/map/${this.info.date}/${this.info.type}`,
+            imageExtent : extent
+          });
+
+        this.imageLayer = new ImageLayer({
+          source: imageStatic,
+          minZoom: this.minZoomFeatureInfo
+        });
+        this.map.addLayer(this.imageLayer);
+        this.view.setCenter(getCenter(extent));
+        this.view.setZoom(this.minZoomFeatureInfo);
+      }
+      catch(err){
+        console.log(err);
+        this.$emit('raiseError');
+      }
     },
     render_outline(TL,BR){
       function getBorder(TL,BR){
@@ -155,6 +182,6 @@ export default {
 
 <style scoped>
 #map{
-  height:80vh
+  height:95vh
 }
 </style>

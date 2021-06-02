@@ -1,23 +1,30 @@
 <template>
   <v-app>
-    <v-container fluid>
-      <v-row>
-        <v-col sm="12 pa-0"><Header></Header></v-col>
-        <v-col sm="2 pa-0">
-          <Sidebar/>
-        </v-col>
-        <v-col sm="10 pa-0">
-          <router-view
+    <Header></Header>
+    <div class="d-flex justify-start ">
+      <Sidebar style="height:95vh;" class="ma-0" :sidebarWidth="sidebarWidth" />
+        <router-view
             v-if="hasMap()"
             :position="position"
             :zoom="zoom"
+            :key="$route.fullPath"
             @changePosition="changePosition"
-          ></router-view>
-          <router-view v-else></router-view>
-        </v-col>
-        <v-col sm="12 pa-0"><Footer></Footer></v-col>
-      </v-row>
-    </v-container>
+            @raiseError="raiseError"
+            class="d-sm-inline"
+            style="height:95vh; width: calc(100vw - 70px);"
+            
+            
+        ></router-view>  
+        <router-view :key="$route.fullPath" v-else></router-view>
+    </div>
+    <Footer></Footer>
+    <v-dialog
+        transition="dialog-bottom-transition"
+        max-width="300"
+        v-model="error"
+      >
+        <Alert></Alert>
+    </v-dialog>
   </v-app>
   
 </template>
@@ -26,6 +33,7 @@
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import Alert from './components/Alert';
 
 import {fromLonLat, toLonLat} from 'ol/proj';
 
@@ -33,22 +41,33 @@ export default {
   name: 'App',
 
   components: {
-    Sidebar, Header,Footer
+    Sidebar, Header,Footer,Alert
   },
 
   data: () => ({
     longitude: 127,
     latitude: 37,
-    zoom: 5
+    zoom: 5,
+    sidebarWidth: '70px',
+    error: false
   }),
   computed:{
     position: function(){
       return fromLonLat([this.longitude,this.latitude]);
     }
   },
+  mounted(){
+    // setInterval(()=>{this.notexist = !this.notexist; console.log(this.notexist)},1000);
+  },
   methods:{
+    toggle(){
+
+    },
     changeType(val){
       this.type=val;
+    },
+    raiseError(){
+      this.error=true;
     },
     changePosition(center, zoom){
       [this.longitude, this.latitude] = toLonLat(center);
@@ -73,20 +92,15 @@ export default {
 *{
   font-family: 'twayair', Arial, Helvetica, sans-serif;
 }
+
+#sidebar{
+  width:auto;
+}
 </style>
 
 <style scoped>
 h1{
   text-align: center;
 }
-/* 
-*{
-  padding:0;
-} */
 
-#addside{
-    position:absolute;
-    left: 200px;
-    top: 100px;
-}
 </style>

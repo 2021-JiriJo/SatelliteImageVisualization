@@ -54,10 +54,10 @@ export default {
     };
   },
   mounted() {
-    this.init();
+    setTimeout(()=>{this.init();},100);
   },
   watch:{
-    '$route'(from){
+    '$route'(){
       this.date_from = this.$route.query.date_from;
       this.date_to = this.$route.query.date_to;
       this.load_data();
@@ -104,9 +104,14 @@ export default {
       this.map2.on('moveend', ()=>{
         this.$emit('changePosition',this.view.getCenter(), this.view.getZoom());
       });
+
+            this.date_from = this.$route.query.date_from;
+      this.date_to = this.$route.query.date_to;
+      this.load_data();
     },
     load_data(){
-      axios.get(`http://localhost:3000/compare/info/${this.date_from}/${this.date_to}`).then(res=>{
+      axios.get(`http://localhost:3000/compare/info/${this.date_from}/${this.date_to}`)
+      .then(res=>{
         let extent1 = res.data.extent1;
         const TL1 = fromLonLat([extent1[0],extent1[1]]);
         const BR1 = fromLonLat([extent1[2],extent1[3]]);
@@ -121,6 +126,9 @@ export default {
         
         this.render_img(extent1, extent2);
         this.render_info(res.data.geojson);
+      })
+      .catch(()=>{
+        this.$emit('raiseError');
       });
     },
 
@@ -220,6 +228,6 @@ export default {
 
 <style scoped>
 .map{
-  height:80vh;
+  height:95vh;
 }
 </style>

@@ -1,61 +1,41 @@
 <template>
-    <v-navigation-drawer fill-height>
-        <v-divider></v-divider>
-        
-        <v-list-item-content>
-            <v-list-item v-for="(item) in items" :key="item.title" >
-                <v-tooltip right>
-                    <template v-slot:activator="{on}">
-                        <v-list-item-icon
-                            v-on="on"
+    <v-container fluid fill-height grey darken-3 v-bind:style="{width: sidebarWidth}" class="d-inline pa-2 align-center">
+        <v-row v-for="(item) in items" :key="item.title" class="d-flex ma-1 justify-center">
+            <v-tooltip right>
+                <template v-slot:activator="{on}">
+                    <v-btn icon v-on="on"
                             link
-                            @click="clickMenu(item.menu)"
-                            >
-                            <v-list-item-icon>
-                                <v-icon>{{item.icon}}</v-icon>
-                            </v-list-item-icon>
-                        </v-list-item-icon>
-                </template>
-                <span>{{item.menu}}</span>
-                </v-tooltip>
-            </v-list-item>
-        </v-list-item-content>
-        
-        <!--       
-        <v-list dense nav>
-            <v-list-item
-                v-for="item in nav_items"
-                :key="item.title"
-                link
-                @click="clickMenu(item.menu)"
-                >
-                <v-list-item-icon>
-                    <v-icon>{{item.icon}}</v-icon>
-                </v-list-item-icon>
-                <v-list-item-content>
-                    <v-list-item-title>{{item.title}}</v-list-item-title>
-                </v-list-item-content>
-            </v-list-item>
-        </v-list>
-        -->
-    </v-navigation-drawer>
+                            @click="clickMenu(item.menu,item.route)">
+                        <v-icon >
+                        {{item.icon}}
+                        </v-icon>
+                    </v-btn>
+                        
+            </template>
+            <span>{{item.menu}}</span>
+            </v-tooltip>
+        </v-row>
+    </v-container>
 </template>
 
 <script>
 
 export default ({
+    props:{
+        sidebarWidth: String
+    },
     data(){
         return {
             items:[
                 {icon: 'mdi-feature-search-outline', menu:'object' },
                 {icon: 'mdi-compare', menu:'compare'},
-                {icon: 'mdi-file-chart', menu:'home'}
+                {icon: 'mdi-file-chart', menu:'home', route:{path:'stat'}}
             ]
         };
     },
     methods:{
-        clickMenu(menu){
-            this.$emit('clickMenu', menu);
+        clickMenu(menu, route){
+            this.$emit('clickMenu', menu, route);
         }
     }
 })
@@ -71,5 +51,9 @@ export default ({
 a{
     text-decoration: none;
     color: black;
+}
+*{
+    padding:0;
+    margin:0;
 }
 </style>
