@@ -1,46 +1,41 @@
 <template>
-    <v-navigation-drawer fill-height>
-        <v-list-item>
-            <v-list-item-content>
-                <v-list-item-title>
-                    Satellite Information
-                </v-list-item-title>
-            </v-list-item-content>
-        </v-list-item>
-        <v-divider></v-divider>
-        <v-list dense nav>
-            <v-list-item
-                v-for="item in nav_items"
-                :key="item.title"
-                link
-                @click="clickMenu(item.menu)"
-                >
-                <v-list-item-icon>
-                    <v-icon>{{item.icon}}</v-icon>
-                </v-list-item-icon>
-                <v-list-item-content>
-                    <v-list-item-title>{{item.title}}</v-list-item-title>
-                </v-list-item-content>
-            </v-list-item>
-        </v-list>
-    </v-navigation-drawer>
+    <v-container fluid fill-height grey darken-3 v-bind:style="{width: sidebarWidth}" class="d-inline pa-2 align-center">
+        <v-row v-for="(item) in items" :key="item.title" class="d-flex ma-1 justify-center">
+            <v-tooltip right>
+                <template v-slot:activator="{on}">
+                    <v-btn icon v-on="on"
+                            link
+                            @click="clickMenu(item.menu,item.route)">
+                        <v-icon >
+                        {{item.icon}}
+                        </v-icon>
+                    </v-btn>
+                        
+            </template>
+            <span>{{item.menu}}</span>
+            </v-tooltip>
+        </v-row>
+    </v-container>
 </template>
 
 <script>
 
 export default ({
+    props:{
+        sidebarWidth: String
+    },
     data(){
         return {
-            nav_items:[
-                {title: '객체 탐지', icon: 'mdi-feature-search-outline', menu:'object' },
-                {title: '변화 탐지', icon: 'mdi-compare', menu:'compare'},
-                {title: '보고서 작성', icon: 'mdi-file-chart', menu:'home'}
+            items:[
+                {icon: 'mdi-feature-search-outline', menu:'object' },
+                {icon: 'mdi-compare', menu:'compare'},
+                {icon: 'mdi-file-chart', menu:'home', route:{path:'stat'}}
             ]
         };
     },
     methods:{
-        clickMenu(menu){
-            this.$emit('clickMenu', menu);
+        clickMenu(menu, route){
+            this.$emit('clickMenu', menu, route);
         }
     }
 })
@@ -56,5 +51,9 @@ export default ({
 a{
     text-decoration: none;
     color: black;
+}
+*{
+    padding:0;
+    margin:0;
 }
 </style>

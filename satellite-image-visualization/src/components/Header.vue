@@ -1,10 +1,10 @@
 <template>
-    <h1>OpenLayers</h1>
+    <h3>Satellite Image Visualization</h3>
 </template>
 
 
 <style scoped>
-h1{
-    text-align: center;
+h3{
+    text-align: left;
 }
 </style>
