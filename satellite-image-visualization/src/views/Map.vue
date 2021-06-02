@@ -18,6 +18,7 @@ import Feature from 'ol/Feature';
 import Polygon from 'ol/geom/Polygon';
 import GeoJSON from 'ol/format/GeoJSON';
 import axios from 'axios';
+
 export default {
   name: 'Map',
   props:{

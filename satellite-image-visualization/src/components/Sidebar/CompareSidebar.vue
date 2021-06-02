@@ -44,6 +44,7 @@ export default ({
             items:[]
         };
     },
+    
     methods:{
         clickHome(){
             this.$emit('clickMenu','home');
