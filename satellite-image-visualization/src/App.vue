@@ -67,7 +67,8 @@ export default {
       this.type=val;
     },
     raiseError(){
-      this.error=true;
+      if(Object.keys(this.$route.query).length > 0)
+        this.error=true;
     },
     changePosition(center, zoom){
       [this.longitude, this.latitude] = toLonLat(center);
