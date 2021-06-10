@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer fill-height> 
+    <v-navigation-drawer fill-height class="d-sm-inline" transition="scroll-x-transition"> 
             <v-list-item>
                 <v-list-item-content>
                     <v-list-item-title>
@@ -44,6 +44,7 @@ export default ({
             items:[]
         };
     },
+    
     methods:{
         clickHome(){
             this.$emit('clickMenu','home');
@@ -57,10 +58,9 @@ export default ({
                 alert('다른 날짜를 선택하세요');
                 return;
             }
-            this.$emit('clickMenu', 'home');
             this.selected_from = this.selected_from.replaceAll('-','');
             this.selected_to = this.selected_to.replaceAll('-','');
-            this.$router.push(`/dualmap?date_from=${this.selected_from}&date_to=${this.selected_to}`);
+            this.$emit('clickMenu', 'home', {path:'dualmap', query:{date_from: this.selected_from, date_to : this.selected_to }});
         }
     }
 })

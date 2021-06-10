@@ -1,5 +1,5 @@
-<template fill-height transition="fade-transition">
-    <MainSidebar v-if="menu=='home'" @clickMenu="clickMenu"/>
+<template>
+    <MainSidebar v-if="menu=='home'" @clickMenu="clickMenu" :sidebarWidth="sidebarWidth"/>
     <ObjectDetectionSidebar v-else-if="menu=='object'" @clickMenu="clickMenu"/>
     <CompareSidebar v-else-if="menu=='compare'" @clickMenu="clickMenu"/>
 </template>
@@ -13,15 +13,20 @@ export default ({
     components:{
         MainSidebar,ObjectDetectionSidebar,CompareSidebar
     },
+    props:{
+        sidebarWidth:String
+    },
     data(){
         return {
             menu:'home'
         };
     },
     methods:{
-        clickMenu(menu){
-            console.log(menu);
+        clickMenu(menu,route){
             this.menu=menu;
+            if(route != null || route != undefined ){
+                this.$router.push(route);
+            }
         }
     }
 })
