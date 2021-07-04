@@ -1,6 +1,7 @@
 <template>
   <v-app>
     <Header></Header>
+    <Navigation></Navigation>
     <div class="d-flex justify-start ">
       <Sidebar style="height:95vh;" class="ma-0" :sidebarWidth="sidebarWidth" />
         <router-view
@@ -15,7 +16,10 @@
             
             
         ></router-view>  
-        <router-view :key="$route.fullPath" v-else></router-view>
+        <router-view 
+          :key="$route.fullPath"
+          @raiseError="raiseError"
+          v-else></router-view>
     </div>
     <Footer></Footer>
     <v-dialog
@@ -23,7 +27,7 @@
         max-width="300"
         v-model="error"
       >
-        <Alert></Alert>
+        <Alert :message="message"></Alert>
     </v-dialog>
   </v-app>
   
@@ -34,14 +38,14 @@ import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Alert from './components/Alert';
-
+import Navigation from './components/Navigation.vue';
 import {fromLonLat, toLonLat} from 'ol/proj';
 
 export default {
   name: 'App',
 
   components: {
-    Sidebar, Header,Footer,Alert
+    Sidebar, Header,Footer,Alert, Navigation
   },
 
   data: () => ({
@@ -49,7 +53,8 @@ export default {
     latitude: 37,
     zoom: 5,
     sidebarWidth: '70px',
-    error: false
+    error: false,
+    message: ''
   }),
   computed:{
     position: function(){
@@ -66,9 +71,10 @@ export default {
     changeType(val){
       this.type=val;
     },
-    raiseError(){
-      if(Object.keys(this.$route.query).length > 0)
+    raiseError(message){
         this.error=true;
+        this.message=message;
+        console.log('awefsd');
     },
     changePosition(center, zoom){
       [this.longitude, this.latitude] = toLonLat(center);
@@ -84,9 +90,9 @@ export default {
 
 <style>
 @font-face {
-    font-family: 'twayair';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_tway@1.0/twayair.woff') format('woff');
-    font-weight: normal;
+    font-family: 'notosans';
+    src: url('/assets/NotoSans.otf') format('otf');
+    font-weight: 500;
     font-style: normal;
 }
 

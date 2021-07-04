@@ -48,6 +48,14 @@ const routes = [
   {
     path: '/stat',
     component: () => import('../views/Stat.vue') 
+  },
+  {
+    path: '/login',
+    component: () => import('../views/Login.vue') 
+  },
+  {
+    path: '/register',
+    component: () => import('../views/Register.vue') 
   }
   // {
   //   path: '/map',
