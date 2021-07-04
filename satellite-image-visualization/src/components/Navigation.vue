@@ -1,10 +1,19 @@
 <template>
     <v-app-bar class="d-flex align-end flex-column ma-1">
-        <v-btn class="pa-2">
-            Login
-        </v-btn>  
+        <router-link 
+            class="pa-2"
+            to="login"
+        >
+            <v-btn class="white--text">Login</v-btn>
+        </router-link>  
     </v-app-bar>
 </template>
 
 <script>
 </script>
+
+<style scoped>
+a{
+    text-decoration: none;
+}
+</style>
