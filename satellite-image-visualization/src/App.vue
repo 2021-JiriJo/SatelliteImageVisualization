@@ -1,6 +1,7 @@
 <template>
   <v-app>
     <Header></Header>
+    <Navigation></Navigation>
     <div class="d-flex justify-start ">
       <Sidebar style="height:95vh;" class="ma-0" :sidebarWidth="sidebarWidth" />
         <router-view
@@ -34,14 +35,14 @@ import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Alert from './components/Alert';
-
+import Navigation from './components/Navigation.vue';
 import {fromLonLat, toLonLat} from 'ol/proj';
 
 export default {
   name: 'App',
 
   components: {
-    Sidebar, Header,Footer,Alert
+    Sidebar, Header,Footer,Alert, Navigation
   },
 
   data: () => ({
