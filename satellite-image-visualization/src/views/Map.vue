@@ -104,7 +104,7 @@ export default {
       .catch(err=>{
         console.log(err);
         this.resetLayer();
-        this.$emit('raiseError');
+        this.$emit('raiseError', 'No Data Exists!');
       });
     },
     render_info(geojson){
@@ -140,7 +140,8 @@ export default {
       }
       catch(err){
         console.log(err);
-        this.$emit('raiseError');
+        if(Object.keys(this.$route.query).length > 0)
+          this.$emit('raiseError', 'No Data Exists!');
       }
     },
     render_outline(TL,BR){

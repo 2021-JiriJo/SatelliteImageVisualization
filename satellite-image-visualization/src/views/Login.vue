@@ -1,7 +1,7 @@
 <template>
     <div class="pa-3">
         <h2>Log In</h2>
-        <form @submit="onSubmit">
+        <form @submit.prevent="onSubmit">
             <v-text-field placeholder="Enter your ID" v-model="uid"/>
             <v-text-field 
                 placeholder="Enter your password" 
@@ -20,13 +20,36 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
     name: 'Login',
     data(){
         return {
-            uid:null,
-            password:null,
+            uid:'',
+            password:'',
             showpw: false
+        }
+    },
+    methods:{
+        onSubmit(){
+            axios({
+                method: 'post',
+                url:'http://localhost:5000/login',
+                data:{
+                    uid:this.uid,
+                    password:this.password
+                }
+            })
+            .then(()=>{
+
+            });
+            if(Math.random() > 0.5){
+                this.$emit('raiseError','로그인 완료!');
+            }
+            else{
+                this.$emit('raiseError','로그인 실패');
+            }
+
         }
     }
 }

@@ -128,7 +128,8 @@ export default {
         this.render_info(res.data.geojson);
       })
       .catch(()=>{
-        this.$emit('raiseError');
+        if(Object.keys(this.$route.query).length > 0)
+          this.$emit('raiseError', 'No Data Exists!');
       });
     },
 
