@@ -15,7 +15,6 @@
         String id = request.getParameter("id");
         String passwd = request.getParameter("password");
 
-
         session = request.getSession();
         Statement stmt = null;
         ResultSet rs = null;
