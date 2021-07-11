@@ -11,10 +11,12 @@
     <%
         request.setCharacterEncoding("utf-8");
         
+        // 회원가입 폼에서 입력된 값을 가져옴
         String id = request.getParameter("id");
         String passwd = request.getParameter("password");
+        String name = request.getParameter("name");
+        String phone = request.getParameter("phone");
 
-        session = request.getSession();
 
         Statement stmt = null;
         ResultSet rs = null;
@@ -27,25 +29,27 @@
         // rs = stmt.executeUpdate(sql);    //변경 쿼리 실행문
 
         while(rs.next()){
-            out.println(id);
-            out.println(passwd);
             String sqlId = rs.getString("ID");  // id는 db의 column이름
-            String sqlPasswd = rs.getString("PASSWD");  // passwd는 db의 column이름
 
-            out.println(sqlId);
-            out.println(sqlPasswd);
-            if(sqlId.equals(id) && sqlPasswd.equals(passwd)){
-                //세션에 id저장
-                session.setAttribute("ID", id);
-
-                //로그인 성공시 넘어갈 페이지
-                response.sendRedirect("http://www.naver.com");
+            if(sqlId.equals(id)){
+                %>
+                <!--회원가입이 실패하였을 경우 이동할 페이지-->
+                <script type="text/javascript">
+                    alert("동일한 아이디가 존재합니다.");
+                    document.location.href="http://www.naver.com";
+                </script>
+                <%
             }
-
         }
+
+        // DB에 데이터를 추가할 sql 쿼리문
+        sql = "INSERT INTO USERS VALUES ('"+id+"', '"+passwd+"', '"+name+"', '"+phone+"')";
+        stmt.executeUpdate(sql);
     %>
+
+    <!--회원가입이 성공한 후 알림창을 클릭하면 이동할 페이지 지정-->
     <script type="text/javascript">
-        alert("아이디 또는 패스워드 정보가 잘못되었습니다.")
+        alert("회원가입이 완료되었습니다.")
         document.location.href="http://www.google.com";
     </script>
 
