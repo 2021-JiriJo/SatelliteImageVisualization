@@ -72,7 +72,7 @@ const swaggerDefinition = {
     version: '1.0.0',
     description: 'For Simple Test',
   },
-  host: 'localhost:3000',
+  host: '104.198.232.60:3000',
 }
 const options = {
   swaggerDefinition: swaggerDefinition,
