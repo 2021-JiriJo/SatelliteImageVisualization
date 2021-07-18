@@ -1,6 +1,7 @@
 {
   "name": "satellite-image-visualization",
   "version": "0.1.0",
+  "homepage": ".",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",

@@ -34,7 +34,7 @@ import axios from 'axios';
 
 export default ({
     created(){
-        axios.get('http://192.168.0.2:3000/compare/date')
+        axios.get('http://104.198.232.60:3000/compare/date')
             .then(res=>this.items=res.data);
     },
     data(){

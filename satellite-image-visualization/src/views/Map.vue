@@ -79,8 +79,8 @@ export default {
         view: this.view,
         target: 'map'
       });
-      
-      if(this.$route.query != null){
+      console.log(this.$route.query);
+      if(Object.keys(this.$route.query).length > 0){
         
         this.info.type = this.$route.query.type;
         this.info.date = this.$route.query.date;
@@ -91,7 +91,7 @@ export default {
       });
     },
     load_data(){
-      axios.get(`http://localhost:3000/object/info/${this.info.date}/${this.info.type}`)
+      axios.get(`http://104.198.232.60:3000/object/info/${this.info.date}/${this.info.type}`)
       .then(res=>{
         let extent = res.data.extent;
         const TL = fromLonLat([extent[0],extent[1]]);
@@ -126,7 +126,7 @@ export default {
       try{
         console.log('ee')
         const imageStatic = new Static({
-            url: `http://localhost:3000/object/map/${this.info.date}/${this.info.type}`,
+            url: `http://104.198.232.60:3000/object/map/${this.info.date}/${this.info.type}`,
             imageExtent : extent
           });
 
