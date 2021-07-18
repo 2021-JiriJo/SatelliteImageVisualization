@@ -6,10 +6,12 @@ import path from 'path';
 import fs from 'fs';
 import logger from 'morgan';
 
-
 const app = express();
 app.use(cors());
 app.use(logger('dev'));
+
+app.use(express.urlencoded({extended: false}));
+app.use(express.json());
 
 const __dirname = path.resolve();
 
@@ -66,17 +68,18 @@ app.get('/compare/info/:date_from/:date_to', (req, res)=>{
 });
 
 app.post('/login', (req, res)=>{
+    // console.log(req);
     if(req.body.id == 'root' && req.body.password == '1234'){
         return res.send("로그인 성공");
     }
     else{
-        return res.send("로그인 실패");
+        return res.status(400).send("로그인 실패");
     }
 });
 
 app.post('/register', (req, res)=>{
     if(req.body.id == 'root'){
-        return res.send("가입 실패");
+        return res.status(400).send("가입 실패");
     }
     else{
         return res.send("가입 성공");
@@ -89,7 +92,7 @@ const swaggerDefinition = {
     version: '1.0.0',
     description: 'For Simple Test',
   },
-  host: '104.198.232.60:3000',
+  host: 'localhost:3000',
 }
 const options = {
   swaggerDefinition: swaggerDefinition,
