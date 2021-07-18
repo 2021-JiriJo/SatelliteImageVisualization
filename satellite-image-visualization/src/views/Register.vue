@@ -15,7 +15,7 @@
 </template>
 
 <script>
-// import axios from 'axios';
+import axios from 'axios';
 export default {
     name: 'Register',
     data(){
@@ -26,18 +26,18 @@ export default {
         }
     },
     methods:{
-        onSubmit(){/*
+        onSubmit(){
             axios({
                 method: 'post',
-                url:'http://localhost:5000/register',
+                url:'http://104.198.232.60:5000/register',
                 data:{
-                    uid:this.uid,
+                    id:this.uid,
                     password:this.password
                 }
             })
             .then(()=>{
 
-            });*/
+            });
             if(Math.random() > 0.5){
                 this.$emit('raiseError','가입 완료!');
             }

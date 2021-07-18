@@ -34,9 +34,9 @@ export default {
         onSubmit(){
             axios({
                 method: 'post',
-                url:'http://localhost:5000/login',
+                url:'http://104.198.232.60:5000/login',
                 data:{
-                    uid:this.uid,
+                    id:this.uid,
                     password:this.password
                 }
             })
