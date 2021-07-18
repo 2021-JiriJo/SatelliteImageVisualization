@@ -65,7 +65,7 @@ app.get('/compare/info/:date_from/:date_to', (req, res)=>{
     });
 });
 
-app.get('/login', (req, res)=>{
+app.post('/login', (req, res)=>{
     if(req.body.id == 'root' && req.body.password == '1234'){
         return res.send("로그인 성공");
     }
@@ -74,7 +74,7 @@ app.get('/login', (req, res)=>{
     }
 });
 
-app.get('/register', (req, res)=>{
+app.post('/register', (req, res)=>{
     if(req.body.id == 'root'){
         return res.send("가입 실패");
     }
