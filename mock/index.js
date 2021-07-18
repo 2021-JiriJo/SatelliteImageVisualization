@@ -73,13 +73,13 @@ app.post('/login', (req, res)=>{
         return res.send("로그인 성공");
     }
     else{
-        return res.status(400).send("로그인 실패");
+        return res.status(401).send("로그인 실패");
     }
 });
 
 app.post('/register', (req, res)=>{
     if(req.body.id == 'root'){
-        return res.status(400).send("가입 실패");
+        return res.status(401).send("가입 실패");
     }
     else{
         return res.send("가입 성공");
