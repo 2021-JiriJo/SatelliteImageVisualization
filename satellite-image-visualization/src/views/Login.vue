@@ -40,16 +40,15 @@ export default {
                     password:this.password
                 }
             })
-            .then(()=>{
-
+            .then((response)=>{
+                this.$emit('raiseError',response.data);
+            })
+            .catch((error)=>{
+                if (error.response) {
+                this.$emit('raiseError',error.response.data);
+                }
             });
-            if(Math.random() > 0.5){
-                this.$emit('raiseError','로그인 완료!');
-            }
-            else{
-                this.$emit('raiseError','로그인 실패');
-            }
-
+            
         }
     }
 }

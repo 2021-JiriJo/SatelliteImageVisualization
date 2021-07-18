@@ -288,7 +288,7 @@ paths:
       responses:
         "200":
           description: "로그인 성공"
-        "400":
+        "401":
           description: "로그인 실패"
   /register:
     post:
@@ -314,6 +314,11 @@ paths:
               type: string
             password:
               type: string
+      responses:
+        "200":
+          description: "가입 성공"
+        "401":
+          description: "가입 실패"
 externalDocs:
   description: "Find out more about Swagger"
   url: "http://swagger.io"
