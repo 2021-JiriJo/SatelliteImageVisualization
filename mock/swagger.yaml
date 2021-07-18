@@ -273,16 +273,18 @@ paths:
       produces:
       - "string"
       parameters:
-      - name: id
-        in: body
+      - in: body
+        name: user        
         description: "아이디"
-        required: true
-        type: string
-      - name: password
-        in: body
-        description: "비밀번호"
-        required: true
-        type: string
+        schema:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+            password:
+              type: string
       responses:
         "200":
           description: "로그인 성공"
@@ -300,21 +302,18 @@ paths:
       produces:
       - "string"
       parameters:
-      - name: id
-        in: body
+      - in: body
+        name: user        
         description: "아이디"
-        required: true
-        type: string
-      - name: password
-        in: body
-        description: "비밀번호"
-        required: true
-        type: string
-      responses:
-        "200":
-          description: "가입 성공"
-        "400":
-          description: "가입 실패"
+        schema:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+            password:
+              type: string
 externalDocs:
   description: "Find out more about Swagger"
   url: "http://swagger.io"
