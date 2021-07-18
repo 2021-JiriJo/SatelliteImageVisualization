@@ -65,6 +65,23 @@ app.get('/compare/info/:date_from/:date_to', (req, res)=>{
     });
 });
 
+app.get('/login', (req, res)=>{
+    if(req.body.id == 'root' && req.body.password == '1234'){
+        return res.send("로그인 성공");
+    }
+    else{
+        return res.send("로그인 실패");
+    }
+});
+
+app.get('/register', (req, res)=>{
+    if(req.body.id == 'root'){
+        return res.send("가입 실패");
+    }
+    else{
+        return res.send("가입 성공");
+    }
+});
 
 const swaggerDefinition = {
   info: { 
