@@ -2,6 +2,13 @@
     <v-app-bar class="d-flex align-end flex-column ma-1">
         <router-link 
             class="pa-2"
+            to="newlayer"
+        >
+            <v-btn class="white--text">Upload</v-btn>
+        </router-link>
+
+        <router-link 
+            class="pa-2"
             to="login"
         >
             <v-btn class="white--text">Login</v-btn>

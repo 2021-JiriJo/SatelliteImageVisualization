@@ -86,6 +86,14 @@ app.post('/register', (req, res)=>{
     }
 });
 
+app.post('/layer', (req, res)=>{
+    fs.writeFile(req.body.jsonFile);
+    res.send("OK");
+});
+
+
+
+
 const swaggerDefinition = {
   info: { 
     title: 'Satellite Visualization',
