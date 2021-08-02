@@ -1,9 +1,8 @@
 <template>
   <v-app>
     <Header></Header>
-    <Navigation></Navigation>
-    <div class="d-flex justify-start ">
-      <Sidebar style="height:95vh;" class="ma-0" :sidebarWidth="sidebarWidth" />
+    <v-container fluid class="d-flex fill-height pa-0">
+      <Sidebar class="ma-0 fill-height" :style="{width: sidebarWidth}"  />
         <router-view
             v-if="hasMap()"
             :position="position"
@@ -11,16 +10,16 @@
             :key="$route.fullPath"
             @changePosition="changePosition"
             @raiseError="raiseError"
-            class="d-sm-inline"
-            style="height:95vh; width: calc(100vw - 70px);"
-            
-            
+            class="fill-height"
+            style="width: calc(100vw - 90px); padding: 0px"
         ></router-view>  
         <router-view 
           :key="$route.fullPath"
           @raiseError="raiseError"
+           style="width: calc(100vw - 90px);"
+           class="fill-height"
           v-else></router-view>
-    </div>
+    </v-container>
     <Footer></Footer>
     <v-dialog
         transition="dialog-bottom-transition"
@@ -38,14 +37,13 @@ import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Alert from './components/Alert';
-import Navigation from './components/Navigation.vue';
 import {fromLonLat, toLonLat} from 'ol/proj';
 
 export default {
   name: 'App',
 
   components: {
-    Sidebar, Header,Footer,Alert, Navigation
+    Sidebar, Header,Footer,Alert
   },
 
   data: () => ({
@@ -91,7 +89,7 @@ export default {
 <style>
 @font-face {
     font-family: 'notosans';
-    src: url('/assets/NotoSans.otf') format('otf');
+    src: url('./assets/NotoSans.otf') format('otf');
     font-weight: 500;
     font-style: normal;
 }
@@ -109,5 +107,4 @@ export default {
 h1{
   text-align: center;
 }
-
 </style>

@@ -1,7 +1,7 @@
 <template>
-    <MainSidebar v-if="menu=='home'" @clickMenu="clickMenu" :sidebarWidth="sidebarWidth"/>
-    <ObjectDetectionSidebar v-else-if="menu=='object'" @clickMenu="clickMenu"/>
+    <ObjectDetectionSidebar v-if="menu=='object'" @clickMenu="clickMenu" fill-height/>
     <CompareSidebar v-else-if="menu=='compare'" @clickMenu="clickMenu"/>
+    <MainSidebar v-else @clickMenu="clickMenu" :sidebarWidth="sidebarWidth" grey darken-3/>
 </template>
 
 <script>
@@ -23,6 +23,7 @@ export default ({
     },
     methods:{
         clickMenu(menu,route){
+            console.log(menu);
             this.menu=menu;
             if(route != null || route != undefined ){
                 this.$router.push(route);
