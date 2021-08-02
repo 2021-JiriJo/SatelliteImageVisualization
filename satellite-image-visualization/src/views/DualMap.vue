@@ -110,7 +110,7 @@ export default {
       this.load_data();
     },
     load_data(){
-      axios.get(`http://104.198.232.60:3000/compare/info/${this.date_from}/${this.date_to}`)
+      axios.get(`compare/info/${this.date_from}/${this.date_to}`)
       .then(res=>{
         let extent1 = res.data.extent1;
         const TL1 = fromLonLat([extent1[0],extent1[1]]);
@@ -154,7 +154,7 @@ export default {
         this.map1.removeLayer(this.imageLayer);
       this.imageLayer = new ImageLayer({
         source: new Static({
-          url: `http://104.198.232.60:3000/compare/map/${this.date_from}/${this.date_to}/from`,
+          url: `compare/map/${this.date_from}/${this.date_to}/from`,
           imageExtent : extent1
         }),
         minZoom: this.minZoomFeatureInfo
@@ -169,7 +169,7 @@ export default {
         this.map2.removeLayer(this.imageLayer);
       this.imageLayer = new ImageLayer({
         source: new Static({
-          url: `http://104.198.232.60:3000/compare/map/${this.date_from}/${this.date_to}/to`,
+          url: `compare/map/${this.date_from}/${this.date_to}/to`,
           imageExtent : extent2
         }),
         minZoom: this.minZoomFeatureInfo

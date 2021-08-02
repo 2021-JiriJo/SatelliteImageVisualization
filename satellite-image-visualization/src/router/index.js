@@ -56,6 +56,10 @@ const routes = [
   {
     path: '/register',
     component: () => import('../views/Register.vue') 
+  },
+  {
+    path: '/newlayer',
+    component: () => import('../views/LayerAdd.vue') 
   }
   // {
   //   path: '/map',
