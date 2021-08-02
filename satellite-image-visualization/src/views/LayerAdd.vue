@@ -37,7 +37,7 @@ export default {
         onSubmit(){      
             axios({
                 method: 'post',
-                url:'http://'+this.$apiServerDev+'layer',
+                url:'layer',
                 'Content-Type': 'multipart/form-data',
                 data:{
                     jsonFile:this.jsonFile,

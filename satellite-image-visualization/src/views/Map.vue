@@ -91,7 +91,7 @@ export default {
       });
     },
     load_data(){
-      axios.get(`http://104.198.232.60:3000/object/info/${this.info.date}/${this.info.type}`)
+      axios.get(`object/info/${this.info.date}/${this.info.type}`)
       .then(res=>{
         let extent = res.data.extent;
         const TL = fromLonLat([extent[0],extent[1]]);
@@ -126,7 +126,7 @@ export default {
       try{
         console.log('ee')
         const imageStatic = new Static({
-            url: `http://104.198.232.60:3000/object/map/${this.info.date}/${this.info.type}`,
+            url: `object/map/${this.info.date}/${this.info.type}`,
             imageExtent : extent
           });
 

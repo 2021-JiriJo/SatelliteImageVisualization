@@ -42,7 +42,7 @@ import axios from 'axios';
 
 export default ({
     created(){
-        axios.get('http://104.198.232.60:3000/object/objects')
+        axios.get('object/objects')
             .then(res=>this.items=res.data);
     },
     data(){
@@ -63,7 +63,7 @@ export default ({
                 return;
             }
             else if(this.datatype == 'object'){
-                axios.get(`http://104.198.232.60:3000/object/${this.selected_item}/date`)
+                axios.get(`object/${this.selected_item}/date`)
                     .then(res=>{
                         console.log('res');
                         this.datatype = 'date';
