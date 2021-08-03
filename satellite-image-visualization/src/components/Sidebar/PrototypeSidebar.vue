@@ -1,26 +1,24 @@
 <template>
     <v-container fluid grey darken-3 v-bind:style="{width: sidebarWidth}" class="d-inline pa-2 align-center">
         <v-row v-for="(item) in items" :key="item.title" class="d-flex ma-1 justify-center">
-            <v-tooltip right>
-                <template v-slot:activator="{on}">
-                    <v-btn icon v-on="on"
-                            link
-                            @click="clickMenu(item.menu,item.route)">
-                        <v-icon >
-                        {{item.icon}}
-                        </v-icon>
-                    </v-btn>
-                        
-            </template>
-            <span>{{item.caption}}</span>
-            </v-tooltip>
+            <NavButton 
+                :menu="item.menu"
+                :route="item.route"
+                :caption="item.caption"
+                :icon="item.icon"
+                @clickMenu="clickMenu">
+            </NavButton>
         </v-row>
     </v-container>
 </template>
 
 <script>
+import NavButton from "./NavButton.vue";
 
 export default ({
+    components:{
+        NavButton
+    },
     props:{
         sidebarWidth: String,
         items: Array

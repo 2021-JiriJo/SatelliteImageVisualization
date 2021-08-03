@@ -1,7 +1,8 @@
 <template>
   <v-app>
     <v-container fluid class="d-flex fill-height pa-0">
-      <Sidebar class="ma-0 fill-height" :style="{width: sidebarWidth}"  />
+      <Sidebar class="ma-0 fill-height" :style="{width: sidebarWidth}"/>
+      
         <router-view
             v-if="hasMap()"
             :position="position"
@@ -9,14 +10,13 @@
             :key="$route.fullPath"
             @changePosition="changePosition"
             @raiseError="raiseError"
-            class="fill-height"
-            style="width: calc(100vw - 90px); padding: 0px"
+            class="fill-height main-view pa-0"
+            
         ></router-view>  
         <router-view 
           :key="$route.fullPath"
           @raiseError="raiseError"
-           style="width: calc(100vw - 90px);"
-           class="fill-height"
+           class="fill-height main-view"
           v-else></router-view>
     </v-container>
     <Footer></Footer>
@@ -33,6 +33,7 @@
 
 <script>
 import Sidebar from './components/Sidebar';
+
 // import Header from './components/Header';
 import Footer from './components/Footer';
 import Alert from './components/Alert';
@@ -106,4 +107,17 @@ export default {
 h1{
   text-align: center;
 }
+
+@media screen and (max-width:768px){
+  .main-view {
+    width: 100vw;
+  }
+}
+@media screen and (min-width:769px){
+  .main-view {
+    width: calc(100vw - 90px);
+  }
+}
+
+
 </style>

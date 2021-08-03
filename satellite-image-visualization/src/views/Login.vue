@@ -1,5 +1,5 @@
 <template>
-    <v-container class="pa-3">
+    <div class="pa-3">
         <h2>Log In</h2>
         <form @submit.prevent="onSubmit">
             <v-text-field placeholder="Enter your ID" v-model="uid"/>
@@ -16,7 +16,7 @@
                 </v-btn>
             </router-link>
         </form>
-    </v-container>
+    </div>
 </template>
 
 <script>

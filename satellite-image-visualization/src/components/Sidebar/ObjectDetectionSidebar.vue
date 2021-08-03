@@ -1,5 +1,9 @@
 <template>
-    <v-navigation-drawer fill-height class="d-sm-inline"> 
+    <v-navigation-drawer 
+     v-model="inDrawer"
+      absolute
+      temporary
+    > 
         <v-list-item>
             <v-list-item-content>
                 <v-list-item-title>
@@ -45,17 +49,30 @@ export default ({
         axios.get('object/objects')
             .then(res=>this.items=res.data);
     },
+    props:{
+        drawer: Boolean
+    },
     data(){
         return {
             selected_item: null,
             selected_object: null,
             items: null,
-            datatype: 'object'
+            datatype: 'object',
+            inDrawer: false
         };
+    },
+    watch:{
+        drawer: function(){
+            this.inDrawer = this.drawer;
+        },
+        inDrawer: function(){
+            if(!this.inDrawer)
+                this.$emit('clickMenu','home');
+        }
     },
     methods:{
         clickHome(){
-            this.$emit('clickMenu','home');
+            this.inDrawer = false;
         },
         clickSelect(){
             if(this.selected_item == null){
@@ -75,6 +92,7 @@ export default ({
             else{
                 this.selected_item = this.selected_item.replaceAll('-','');
                 this.$emit('clickMenu', 'home',{path:'map', query:{type: this.selected_object, date : this.selected_item }});
+
             }
         }
     }

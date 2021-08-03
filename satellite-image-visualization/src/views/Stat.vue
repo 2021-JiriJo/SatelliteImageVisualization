@@ -1,30 +1,30 @@
 <template>
-  <v-container fluid class="fill-height">
-    <v-row>
-
-      <v-col sm="12">       
-        <h2>객체 분석 정보</h2>
+  <div>
+    <v-container fluid>
+      <v-row>
+        <v-col sm="12">       
+          <h2>객체 분석 정보</h2>
+          </v-col>
+        <v-col md="6">
+          <v-select
+            :items="date"
+            label="Date"
+            solo
+          ></v-select>
+          <BarChart></BarChart>
+          </v-col>
+        <v-col md="6">
+          <v-select
+            :items="objects"
+            label="objects"
+            solo
+          ></v-select>
+          <LineChart></LineChart>
         </v-col>
-      <v-col sm="6">
-        <v-select
-          :items="date"
-          label="Date"
-          solo
-        ></v-select>
-        <BarChart></BarChart>
-        </v-col>
-      <v-col sm="6">
-        <v-select
-          :items="objects"
-          label="objects"
-          solo
-        ></v-select>
-        <LineChart></LineChart>
-      </v-col>
-      <v-col sm="12"></v-col>
-      <v-col sm="12"></v-col>
-    </v-row>
-  </v-container>
+      </v-row>
+    </v-container>
+  </div>
+  
 </template>
 
 <script>

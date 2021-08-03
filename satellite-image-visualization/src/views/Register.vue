@@ -1,5 +1,5 @@
 <template>
-    <v-container class="pa-3">
+    <div class="pa-3">
         <h2>Register</h2>
         <form @submit.prevent="onSubmit">
             <v-text-field placeholder="Enter your ID" v-model="uid"/>
@@ -11,7 +11,7 @@
                 @click:append="showpw = !showpw"/>
             <v-btn type="submit">Register</v-btn>
         </form>
-    </v-container>
+    </div>
 </template>
 
 <script>

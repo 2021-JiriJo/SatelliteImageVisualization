@@ -1,17 +1,19 @@
 <template>
-    <ObjectDetectionSidebar v-if="menu=='object'" @clickMenu="clickMenu" fill-height/>
-    <CompareSidebar v-else-if="menu=='compare'" @clickMenu="clickMenu"/>
-    <MainSidebar v-else @clickMenu="clickMenu" :sidebarWidth="sidebarWidth" grey darken-3/>
+    <div class="pa-0 fill-height">
+        <MainSidebar @clickMenu="clickMenu" :sidebarWidth="sidebarWidth" class="sidebar grey darken-3 fill-height" />
+        <CompareSidebar :drawer="menu=='compare'" @clickMenu="clickMenu"/>
+        <ObjectDetectionSidebar :drawer="menu=='object'" @clickMenu="clickMenu"/>
+    </div>    
 </template>
 
 <script>
 import MainSidebar from '../components/Sidebar/MainSidebar';
-import ObjectDetectionSidebar from '../components/Sidebar/ObjectDetectionSidebar';
-import CompareSidebar from '../components/Sidebar/CompareSidebar';
+import CompareSidebar from '../components/Sidebar/CompareSidebar.vue'
+import ObjectDetectionSidebar from '../components/Sidebar/ObjectDetectionSidebar.vue'
 
 export default ({
     components:{
-        MainSidebar,ObjectDetectionSidebar,CompareSidebar
+        MainSidebar,CompareSidebar,ObjectDetectionSidebar
     },
     props:{
         sidebarWidth:String
@@ -32,3 +34,7 @@ export default ({
     }
 })
 </script>
+
+<style scoped>
+
+</style>

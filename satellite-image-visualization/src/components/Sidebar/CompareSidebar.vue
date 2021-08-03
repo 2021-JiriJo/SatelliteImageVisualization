@@ -1,5 +1,8 @@
 <template>
-    <v-navigation-drawer fill-height class="d-sm-inline" transition="scroll-x-transition"> 
+    <v-navigation-drawer
+      v-model="inDrawer"
+      absolute
+      temporary> 
             <v-list-item>
                 <v-list-item-content>
                     <v-list-item-title>
@@ -37,17 +40,29 @@ export default ({
         axios.get(`compare/date`)
             .then(res=>this.items=res.data);
     },
+    props:{
+        drawer: Boolean
+    },
     data(){
         return {
             selected_from: null,
             selected_to: null,
-            items:[]
+            items:[],
+            inDrawer: false
         };
     },
-    
+    watch:{
+        drawer: function(){
+            this.inDrawer = this.drawer;
+        },
+        inDrawer: function(){
+            if(!this.inDrawer)
+                this.$emit('clickMenu','home');
+        }
+    },
     methods:{
         clickHome(){
-            this.$emit('clickMenu','home');
+            this.inDrawer = false;
         },
         clickSelect(){
             if(this.selected_from == null || this.selected_to == null){

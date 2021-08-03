@@ -1,6 +1,6 @@
 <template>
-    <v-container>
-<h2>Add New Layer</h2>
+    <div class="pa-3">
+        <h2>Add New Layer</h2>
         <form @submit.prevent="onSubmit">
             <v-file-input 
                 truncate-length="15" 
@@ -16,17 +16,17 @@
                 required
                 v-model="jsonFile">
             </v-file-input>
-            <v-container class="text-right">
+            <div class="text-right">
                 <v-btn type="submit">Upload</v-btn>
-            </v-container>
+            </div>
         </form>
-    </v-container>
+    </div>
 </template>
 
 <script>
 import axios from 'axios';
 export default {
-    name: 'LayerAdd',
+    name: 'Upload',
     data(){
         return {
             jsonFile: null,

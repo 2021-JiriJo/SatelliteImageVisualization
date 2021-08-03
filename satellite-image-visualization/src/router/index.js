@@ -58,17 +58,17 @@ const routes = [
     component: () => import('../views/Register.vue') 
   },
   {
-    path: '/newlayer',
-    component: () => import('../views/LayerAdd.vue') 
+    path: '/upload',
+    component: () => import('../views/Upload.vue') 
   },
   {
-    path: '/404',
-    component: () => import('../views/NotFound.vue') 
+    path: '/aboutus',
+    component: () => import('../views/AboutUs.vue') 
   },
   {
     path: '*',
-    redirect: "404"
-  },
+    component: () => import('../views/NotFound.vue') 
+  }
 
 ]
 
