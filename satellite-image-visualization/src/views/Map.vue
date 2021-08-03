@@ -126,7 +126,7 @@ export default {
       try{
         console.log('ee')
         const imageStatic = new Static({
-            url: `object/map/${this.info.date}/${this.info.type}`,
+            url: axios.defaults.baseURL+`object/map/${this.info.date}/${this.info.type}`,
             imageExtent : extent
           });
 

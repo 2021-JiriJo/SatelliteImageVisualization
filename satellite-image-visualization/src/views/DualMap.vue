@@ -154,7 +154,7 @@ export default {
         this.map1.removeLayer(this.imageLayer);
       this.imageLayer = new ImageLayer({
         source: new Static({
-          url: `compare/map/${this.date_from}/${this.date_to}/from`,
+          url: axios.defaults.baseURL+`compare/map/${this.date_from}/${this.date_to}/from`,
           imageExtent : extent1
         }),
         minZoom: this.minZoomFeatureInfo
@@ -169,7 +169,7 @@ export default {
         this.map2.removeLayer(this.imageLayer);
       this.imageLayer = new ImageLayer({
         source: new Static({
-          url: `compare/map/${this.date_from}/${this.date_to}/to`,
+          url: axios.defaults.baseURL+`compare/map/${this.date_from}/${this.date_to}/to`,
           imageExtent : extent2
         }),
         minZoom: this.minZoomFeatureInfo

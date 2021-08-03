@@ -1,6 +1,5 @@
 <template>
   <v-app>
-    <Header></Header>
     <v-container fluid class="d-flex fill-height pa-0">
       <Sidebar class="ma-0 fill-height" :style="{width: sidebarWidth}"  />
         <router-view
@@ -34,7 +33,7 @@
 
 <script>
 import Sidebar from './components/Sidebar';
-import Header from './components/Header';
+// import Header from './components/Header';
 import Footer from './components/Footer';
 import Alert from './components/Alert';
 import {fromLonLat, toLonLat} from 'ol/proj';
@@ -43,7 +42,7 @@ export default {
   name: 'App',
 
   components: {
-    Sidebar, Header,Footer,Alert
+    Sidebar,Footer,Alert
   },
 
   data: () => ({

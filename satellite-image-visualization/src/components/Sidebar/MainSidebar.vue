@@ -19,6 +19,7 @@ export default ({
     data(){
         return {
             mainItems:[
+                {icon: 'mdi-home', caption:'홈', route:{path:'map'} },
                 {icon: 'mdi-feature-search-outline', caption:'객체 탐지', menu:'object' },
                 {icon: 'mdi-compare', caption:'변화 탐지', menu:'compare'},
                 {icon: 'mdi-file-chart', caption:'보고서', route:{path:'stat'}}
