@@ -1,0 +1,20 @@
+<featureType>
+  <name>annotations</name>
+  <nativeName>annotations</nativeName>
+  <title>Annotations</title>
+  <srs>EPSG:4326</srs>
+  <attributes>
+    <attribute>
+      <name>the_geom</name>
+      <binding>org.locationtech.jts.geom.Polygon</binding>
+    </attribute>
+    <attribute>
+      <name>information</name>
+      <binding>java.lang.String</binding>
+    </attribute>
+    <attribute>
+      <name>time</name>
+      <binding>java.util.Date</binding>
+    </attribute>
+  </attributes>
+</featureType>
