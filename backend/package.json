@@ -1,0 +1,38 @@
+{
+  "name": "mock-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "nodemon index.js --config nodemon.json",
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.3",
+    "nodemon": "^2.0.14",
+    "pg": "^8.7.1",
+    "request": "^2.88.2",
+    "request-promise-native": "^1.0.9",
+    "session-file-store": "^1.5.0",
+    "vuex": "^3.6.2"
+  },
+  "nodemonconfig": {
+    "ignore": [
+      "sessions/*"
+    ]
+  },
+  "devDependencies": {
+    "swagger-jsdoc": "^7.0.0-rc.6",
+    "swagger-ui-express": "^4.1.6"
+  },
+  "type": "module"
+}
