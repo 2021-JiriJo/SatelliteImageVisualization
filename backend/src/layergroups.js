@@ -1,4 +1,5 @@
 import express from 'express';
+import fs from 'fs';
 
 import connection from '../db_connection.js';
 
@@ -94,4 +95,33 @@ router.get('/:layergroup/layers/:layer', async function (req, res){
     }
     
 });
+
+router.post('/:layergroup/layers/:layer/image', async function (req,res){
+    const query = {
+        name: 'get-image',
+        text: `
+            SELECT imgs.blob
+            FROM public.layers AS ls
+            JOIN public.layergroups AS lgs
+            ON ls.layer_layergroup = lgs.layergroup_id
+            AND lgs.layergroup_owner = $1
+            AND lgs.layergroup_name = $2
+            AND ls.layer_name = $3
+            JOIN public.images AS imgs
+            ON ls.layer_layergroup = imgs.layer_id;`,
+        values: [req.session.uuid, req.params.layergroup, req.params.layer]
+    };
+    try{       
+        const img_id = await connection.query(query);
+        fs.readFileSync()
+        img_id.rows[0].blob;
+    }
+    catch(err){
+        console.log('Add Feature Error');
+        console.log(`ID : ${layer_id}\nFeature\n`);
+        console.log(feature);
+        throw err;
+    }    
+});    
+
 export default router;

@@ -87,6 +87,25 @@ async function addFeature(layer_id, feature){
     }    
 }
 
+async function addImage(layer_id, image_dir){
+    const query = {
+        name: 'add-image',
+        text: `
+            INSERT INTO public.images(layer_id, blob)
+            VALUES ($1, $2);`,
+        values: [layer_id,image_dir]
+    };
+    try{       
+        await connection.query(query);
+    }
+    catch(err){
+        console.log('Add Feature Error');
+        console.log(`ID : ${layer_id}\nFeature\n`);
+        console.log(feature);
+        throw err;
+    }    
+}
+
 async function addWFS(layer_name, layer_id){
     var headers = {
         'Content-type': 'text/xml'
@@ -159,6 +178,7 @@ router.post('/:layerName',
                 const geojson = JSON.parse(data.toString());
                 const add_feature_promises = geojson.features.map(e => addFeature(layerId, e));
                 await Promise.all(add_feature_promises);
+                await addImage(layerId, req.files.pngFile[0].path);
                 await addWFS(layerName, layerId);
                 await connection.query('COMMIT');
                 return res.send("OK");
@@ -176,6 +196,7 @@ router.post('/:layerName',
         //         else console.log(res);
         //     });
         // })
-    });
+});
+
 
 export default router;
