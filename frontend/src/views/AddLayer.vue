@@ -30,18 +30,26 @@
             <v-file-input 
                 truncate-length="15" 
                 prepend-icon="mdi-camera" 
-                placeholder="Upload Image File *required"
+                placeholder="Upload Image File"
                 required
                 v-model="pngFile"
                 @change="previewFile">
             </v-file-input>
             <v-file-input 
                 truncate-length="15" 
-                placeholder="Upload JSON Data *required"
+                placeholder="Upload Image Extent"
                 accept="application/json"
+                required
+                v-model="extent">
+            </v-file-input>
+            <v-file-input 
+                truncate-length="15" 
+                placeholder="Upload GeoJSON Data"
+                accept="geojson"
                 required
                 v-model="jsonFile">
             </v-file-input>
+            
             
             <div class="text-right">
                 <v-btn type="submit">Upload</v-btn>
@@ -62,13 +70,14 @@ export default {
             layerDescription: null,
             jsonFile: null,
             pngFile: null,
+            extent: null,
             featureType: null,
             date:null,
         }
     },
     mounted(){
         axios({
-            url:'/layergroups',
+            url:`/users/${this.$store.getters.user_id}/layergroups`,
             headers:{withCredentials:true},
             method: 'get'
         })
@@ -95,10 +104,12 @@ export default {
             formData.append('layerDescription',this.layerDescription);
             
             formData.append('date',this.date);
+
+            formData.append('extent',this.extent);
             formData.append('jsonFile',this.jsonFile);
             formData.append('pngFile',this.pngFile);
-
-            axios.post(`layers/${this.layerName}`, formData, {
+            console.log('req');
+            axios.post(`/users/${this.$store.getters.user_id}/layers/${this.layerName}`, formData, {
                 headers:{'Content-Type': 'multipart/form-data'}
             })
             .then((response)=>{

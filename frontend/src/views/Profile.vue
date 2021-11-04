@@ -26,7 +26,7 @@
 export default {
     computed:{
         user_id(){
-            return this.$store.getters.get_user_id;
+            return this.$store.getters.user_id;
         },
         is_login(){
             return this.user_id != '';

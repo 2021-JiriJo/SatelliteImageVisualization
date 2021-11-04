@@ -6,6 +6,7 @@ import fs from 'fs';
 import connection from '../db_connection.js';
 
 import request from 'request-promise-native';
+import { resolve } from 'path';
 
 const router = express.Router();
 
@@ -87,21 +88,20 @@ async function addFeature(layer_id, feature){
     }    
 }
 
-async function addImage(layer_id, image_dir){
+async function addImage(layer_id, image_dir, extent){
     const query = {
         name: 'add-image',
         text: `
-            INSERT INTO public.images(layer_id, blob)
-            VALUES ($1, $2);`,
-        values: [layer_id,image_dir]
+            INSERT INTO public.images(layer_id, dir, extent)
+            VALUES ($1, $2, $3);`,
+        values: [layer_id,image_dir, extent]
     };
     try{       
         await connection.query(query);
     }
     catch(err){
-        console.log('Add Feature Error');
-        console.log(`ID : ${layer_id}\nFeature\n`);
-        console.log(feature);
+        console.log('Add Image Error');
+        console.log(`ID : ${layer_id}\nImage Dir : ${image_dir}\nextent : ${extent}`);
         throw err;
     }    
 }
@@ -154,41 +154,45 @@ async function addWFS(layer_name, layer_id){
 router.post('/:layerName', 
     multer({storage: multer.diskStorage({
                 destination: function(req,file,cb){
-                    cb(null,'./tmp/');
+                    cb(null,'./data/images/');
                     
                 },
 
-                // filename: function(req,file,cb){
-                //     const filenames = file.originalname.split('.');
-                //     const extension = filenames[filenames.length -  1];
-                //     cb(null, req.params.layerName+'.'+extension);
-                // }
+                filename: function(req,file,cb){
+                    const filenames = file.originalname.split('.');
+                    const extension = filenames[filenames.length -  1];
+                    cb(null, file.path+'.'+extension);
+                }
             })
-    }).fields([{name:'jsonFile'},{name:'pngFile'}]) ,
+    }).fields([{name:'jsonFile'},{name:'pngFile'},{name:'extent'}]) ,
     
     async function (req, res) {
+        if(req.session.uuid == ''){
+            res.sendStatus(401);
+        }
         const layerName = req.params.layerName;
         try {
-            fs.readFile(req.files.jsonFile[0].path, async function(err, data){
+            const data = fs.readFileSync(req.files.jsonFile[0].path);
+            await connection.query('BEGIN');
+            const layergroudId = await getLayergroupId(req.session.uuid, req.body.layergroupName);
+            const layerId = await addLayer(layergroudId, req.session.uuid, req.body);
 
-                await connection.query('BEGIN');
-                const layergroudId = await getLayergroupId(req.session.uuid, req.body.layergroupName);
-                const layerId = await addLayer(layergroudId, req.session.uuid, req.body);
+            const geojson = JSON.parse(data.toString());
+            const add_feature_promises = geojson.features.map(e => addFeature(layerId, e));
+            await Promise.all(add_feature_promises);
 
-                const geojson = JSON.parse(data.toString());
-                const add_feature_promises = geojson.features.map(e => addFeature(layerId, e));
-                await Promise.all(add_feature_promises);
-                await addImage(layerId, req.files.pngFile[0].path);
-                await addWFS(layerName, layerId);
-                await connection.query('COMMIT');
-                return res.send("OK");
-            });
+            const extent = fs.readFileSync(req.files.extent[0].path);
+            await addImage(layerId, req.files.pngFile[0].path, extent.toString());
+            await addWFS(layerName, layerId);
+            await connection.query('COMMIT');
+            return res.send("OK");    
         }
         catch (err) {
             console.error(err.stack);
             await connection.query('ROLLBACK');
             return res.sendStatus(500);
         }
+        resolve();
         // let geojson = null;
         // fs.readFile(req.files.pngFile[0].path, (err,data)=>{
         //     fs.writeFile(`./tmp/${layerName}.png`,data, function(err,res){

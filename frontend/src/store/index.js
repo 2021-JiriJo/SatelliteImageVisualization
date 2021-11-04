@@ -7,16 +7,17 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    user_id:""
+    user_id:undefined
   },
   mutations: {
     set_user_id(state, payload){
+      console.log(payload.user_id);
       state.user_id = payload.user_id;
     }
   },
   actions: {
     check_session(context){
-      return axios.get('/users/login')
+      return axios.get('/login')
       .then(res=>{
         context.commit('set_user_id',{user_id: res.data});
           router.push('/map');
@@ -29,7 +30,7 @@ export default new Vuex.Store({
       return axios({
         headers:{withCredentials:true},
         method: 'post',
-        url:`users/login`,
+        url:`/login`,
         data:payload
         })
         .then((response)=>{
@@ -38,7 +39,7 @@ export default new Vuex.Store({
                 // this.$store.state.user_id = response.data;
                 console.log('logged in');
                 context.commit('set_user_id',{user_id: response.data});
-                router.push(`users/${this.state.user_id}/profile`);
+                router.push(`/`);
             }
             else{
                 this.$emit('raiseError',response.data);
@@ -51,7 +52,7 @@ export default new Vuex.Store({
         });
     },
     logout(context){
-      return axios.get('/users/logout')
+      return axios.get('/logout')
             .then(res=>{
               context.commit('set_user_id',{user_id: undefined});
               if(res.status==200){
@@ -72,7 +73,7 @@ export default new Vuex.Store({
   modules: {
   },
   getters:{
-    get_user_id(state){
+    user_id(state){
       return state.user_id;
     }
   }

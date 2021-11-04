@@ -69,24 +69,6 @@ export default {
       }
     },
     async init(){
-      // fromLonLat([127,37])
-      // let jiri = new TileWMS({
-      //   url: 'http://localhost:8080/geoserver/test/wms',
-      //   params: {
-      //     'format':'image/png',
-      //     'LAYERS':'test:seoul',
-      //     'TRANSPARENT':'true'
-      //   },
-      //   serverType: 'geoserver',
-      //   crossOrigin:'anonymous'
-      // });
-
-      // let wmsLayer = new TileLayer({
-      //   source: jiri,
-      //   opacity: 0.5,
-      //   visible: true
-      // });
-
       let tileLayer = new TileLayer({
         source: new XYZ({
           url: 'https://api.maptiler.com/tiles/satellite/{z}/{x}/{y}.jpg?key=' + this.map_key,
@@ -109,9 +91,22 @@ export default {
         try{
           const layer_name = this.$route.params.layer;
           const layergroup_name = this.$route.params.layergroup;
-          const res = await axios.get(`http://localhost:3000/layergroups/${layergroup_name}/layers/${layer_name}`);
+          let res = await axios.get(`/users/${this.$route.params.user_id}/layergroups/${layergroup_name}/layers/${layer_name}`);
           const geojson = await axios.get(res.data);
           this.render_info(geojson.data);
+
+          const eres = await axios.get(`/users/${this.$route.params.user_id}/layergroups/${layergroup_name}/layers/${layer_name}/image/extent`);
+          let extent = eres.data;
+          const TL = fromLonLat([extent[0],extent[1]]);
+          const BR = fromLonLat([extent[2],extent[3]]);
+          extent = TL.concat(BR);
+          this.render_outline(TL,BR);
+          this.render_img(extent);
+
+
+          this.imageLayer.setZIndex(0);
+          this.imageOutlineLayer.setZIndex(1);
+          this.objectInfoLayer.setZIndex(2);
         }
         catch(err){
           console.log(err.stack);
@@ -119,27 +114,7 @@ export default {
           this.$emit('raiseError', 'No Data Exists!');
         }
       }
-      
-      
 
-      // .then(res=>{
-      //   this.render_info(res.data);
-      //   // let source = new VectorSource({
-      //   //   features: new GeoJSON().readFeatures(res.data),
-      //   // });
-
-      //   // let infoLayer = new VectorLayer({
-      //   //   source: source,
-      //   //   visible: true
-      //   // });
-      //   // this.map.addLayer(infoLayer);
-      //   // this.map.getLayers();
-      // })
-      // .catch(err=>{
-      //   console.log(err);
-      //   this.resetLayer();
-      //   this.$emit('raiseError', 'No Data Exists!');
-      // });
       
       console.log(this.$route.query);
       if(Object.keys(this.$route.query).length > 0){
@@ -148,26 +123,6 @@ export default {
         this.info.date = this.$route.query.date;
         this.load_data();
       }
-      this.map.on('moveend', ()=>{
-        this.$emit('changePosition',this.view.getCenter(), this.view.getZoom());
-      });
-    },
-    load_data(){
-      axios.get(`object/info/${this.info.date}/${this.info.type}`)
-      .then(res=>{
-        let extent = res.data.extent;
-        const TL = fromLonLat([extent[0],extent[1]]);
-        const BR = fromLonLat([extent[2],extent[3]]);
-        extent = TL.concat(BR);
-        this.render_outline(TL,BR);
-        this.render_img(extent);
-        this.render_info(res.data.geojson);
-      })
-      .catch(err=>{
-        console.log(err);
-        this.resetLayer();
-        this.$emit('raiseError', 'No Data Exists!');
-      });
     },
     render_info(geojson){
         let source = new VectorSource({
@@ -177,6 +132,15 @@ export default {
           this.map.removeLayer(this.objectInfoLayer);
         this.objectInfoLayer = new VectorLayer({
           source: source,
+          style:new Style({
+                            stroke: new Stroke({
+                              color: 'yellow',
+                              width: 3,
+                            }),
+                            fill: new Fill({
+                              color: 'rgba(0, 0, 0, 0)',
+                            })
+                          }),
           visible: true
         });
         this.map.addLayer(this.objectInfoLayer);
@@ -186,9 +150,8 @@ export default {
       if(this.imageLayer != null)
         this.map.removeLayer(this.imageLayer);
       try{
-        console.log('ee')
         const imageStatic = new Static({
-            url: axios.defaults.baseURL+`object/map/${this.info.date}/${this.info.type}`,
+            url: axios.defaults.baseURL+`users/${this.$route.params.user_id}/layergroups/${this.$route.params.layergroup}/layers/${this.$route.params.layer}/image`,
             imageExtent : extent
           });
 
@@ -225,7 +188,7 @@ export default {
             width: 5,
           }),
           fill: new Fill({
-            color: 'rgba(0, 0, 255, 0.1)',
+            color: 'rgba(0, 0, 255, 0)',
           }),
         })
       }

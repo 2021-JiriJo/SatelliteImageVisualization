@@ -43,7 +43,7 @@ import axios from 'axios';
 export default ({
     mounted(){
         axios({
-            url:'/layergroups',
+            url:`/users/${this.$store.getters.user_id}/layergroups`,
             headers:{withCredentials:true},
             method: 'get'
         }).then(res=>this.items=res.data);
@@ -56,9 +56,7 @@ export default ({
         };
     },
     methods:{
-        clickSelect(){
-            // this.$router.push(`/users/${this.$store.state.user_id}/layergroups/${this.selected_item}/layers`);
-            
+        clickSelect(){            
             this.$router.push({
                 name:'layers', 
                 params:{

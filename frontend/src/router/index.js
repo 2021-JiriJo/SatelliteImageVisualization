@@ -116,6 +116,7 @@ const routes = [
   {
     path: '/users/:user_id',
     component: () => import('../views/RouterView.vue'),
+    props:true,
     children:[
       {path:'', component:  () => import('../views/Dashboard.vue'), beforeEnter: is_login},
       {path:'profile', component:  () => import('../views/Profile.vue'), beforeEnter: is_login}, 

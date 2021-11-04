@@ -29,7 +29,7 @@ export default {
         onSubmit(){
             axios({
                 method: 'post',
-                url:`users/register`,
+                url:`register`,
                 data:{
                     id:this.uid,
                     password:this.password

@@ -48,7 +48,7 @@ export default {
     },
     methods:{
         onSubmit(){      
-            axios.post(`layergroups/${this.layerGroupName}`, 
+            axios.post(`/users/${this.$store.getters.user_id}/layergroups/${this.layerGroupName}`, 
             {
                 layerGroupName: this.layerGroupName,
                 layerGroupDescription: this.layerGroupDescription,
