@@ -12,14 +12,22 @@ const router = express.Router({mergeParams: true});
 router.get('/', async function(req, res){   
     let query = {
         name: 'get-layergroups',
-        text: `SELECT layergroup_name FROM public.layergroups WHERE layergroup_owner = $1`,
+        text: `SELECT layergroup_name, us.id
+        FROM public.layergroups as lgs
+        JOIN public.users as us
+        ON lgs.layergroup_owner = us.user_id
+        WHERE us.user_id = $1`,
         values: [req.session.uuid]
     }
 
     if(req.session.uuid == '' || req.session.uuid == undefined){
         query = {
             name: 'get-layergroups-public',
-            text: query.text = `SELECT layergroup_name FROM public.layergroups WHERE layergroup_visibility = true`
+            text: query.text = `SELECT layergroup_name, us.id
+            FROM public.layergroups as lgs
+            JOIN public.users as us
+            ON lgs.layergroup_owner = us.user_id
+            WHERE lgs.layergroup_visibility = true`
         };
     }
 
@@ -29,7 +37,7 @@ router.get('/', async function(req, res){
             return res.sendStatus(204);
         }
         else{
-            return res.send(layergroup_names.rows.map(e=>e.layergroup_name));
+            return res.send(layergroup_names.rows.map(e=>[e.layergroup_name, e.id]));
         }
     }
     catch(err){
@@ -37,8 +45,11 @@ router.get('/', async function(req, res){
     }
 });
 
-router.post('/:layergroup', check_session, async function(req, res){
-    // if(req.session.uuid )
+router.post('/:layergroup', async function(req, res){
+    console.log(req.session);
+    if(req.session.uuid == undefined){
+        return res.sendStatus(401);
+    }
     let visibility = req.body.visibility == 'Public';
     const query = {
         name: 'add-layergroups',
@@ -64,7 +75,7 @@ router.get('/:layergroup/layers', async function (req, res){
         const layers = await connection.query({
             name: 'get-layers-in-layergroup',
             text: `
-                SELECT ls.layer_name
+                SELECT ls.layer_name, lgs.layergroup_visibility
                 FROM public.layers AS ls
                 JOIN public.layergroups AS lgs
                 ON ls.layer_layergroup = lgs.layergroup_id
@@ -75,6 +86,9 @@ router.get('/:layergroup/layers', async function (req, res){
             values: [req.params.layergroup, req.params.user_id]
         });
         console.log(layers.rows);
+        if(!layers.rows[0].layergroup_visibility && req.session.uuid == undefined){
+            return res.sendStatus(401);
+        }
         return res.send(layers.rows.map(e=>e.layer_name));
     }
     catch(err){
@@ -89,7 +103,7 @@ router.get('/:layergroup/layers/:layer', async function (req, res){
         const lid = await connection.query({
             name: 'get-layer-id-from-layer-name',
             text: `
-            SELECT ls.layer_id
+            SELECT ls.layer_id, lgs.layergroup_visibility
             FROM public.layers AS ls
             JOIN public.layergroups AS lgs
             ON ls.layer_layergroup = lgs.layergroup_id
@@ -100,8 +114,11 @@ router.get('/:layergroup/layers/:layer', async function (req, res){
 			WHERE ls.layer_name = $3`,
             values: [req.params.layergroup, req.params.user_id, req.params.layer]
         });
+        if(!lid.rows[0].layergroup_visibility && req.session.uuid == undefined){
+            return res.sendStatus(401);
+        }
         const id = lid.rows[0].layer_id;
-        return res.send(`http://localhost:8080/geoserver/siv/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=siv%3A${id}&outputFormat=application%2Fjson`);
+        return res.send(`http://121.183.220.132:8080/geoserver/siv/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=siv%3A${id}&outputFormat=application%2Fjson`);
     }
     catch(err){
         console.log(err.stack);
@@ -114,7 +131,7 @@ router.get('/:layergroup/layers/:layer/image/extent', async function (req,res){
     const query = {
         name: 'get-extent',
         text: `
-            SELECT imgs.extent
+            SELECT imgs.extent, lgs.layergroup_visibility
             FROM public.images AS imgs
             JOIN public.layers AS ls
             ON ls.layer_id = imgs.layer_id
@@ -129,6 +146,9 @@ router.get('/:layergroup/layers/:layer/image/extent', async function (req,res){
     };
     try{       
         const qres = await connection.query(query);
+        if(!qres.rows[0].layergroup_visibility && req.session.uuid == undefined){
+            return res.sendStatus(401);
+        }
         return res.send(qres.rows[0].extent);
     }
     catch(err){
@@ -143,7 +163,7 @@ router.get('/:layergroup/layers/:layer/image', async function (req,res){
     const query = {
         name: 'get-image',
         text: `
-            SELECT imgs.dir
+            SELECT imgs.dir, lgs.layergroup_visibility
             FROM public.images AS imgs
             JOIN public.layers AS ls
             ON ls.layer_id = imgs.layer_id
@@ -160,7 +180,10 @@ router.get('/:layergroup/layers/:layer/image', async function (req,res){
         const qres = await connection.query(query);
         
         // const dir = path.join(__dirname,qres.rows[0].dir);
-        console.log(qres.rows[0].dir);
+        // console.log(qres.rows[0].dir);
+        if(!qres.rows[0].layergroup_visibility && req.session.uuid == undefined){
+            return res.sendStatus(401);
+        }
         return res.sendFile(path.join(__dirname,qres.rows[0].dir));
     }
     catch(err){

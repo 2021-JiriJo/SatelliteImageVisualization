@@ -87,7 +87,7 @@ export default {
                 this.$router.push('/addlayergroup');
             }
             else if(res.status == 200){
-                this.layergroupItems = res.data;
+                this.layergroupItems = res.data.map(e=>e[0]);
             }
             else{
                 this.$emit('raiseError',res.data);
@@ -110,7 +110,7 @@ export default {
             formData.append('pngFile',this.pngFile);
             console.log('req');
             axios.post(`/users/${this.$store.getters.user_id}/layers/${this.layerName}`, formData, {
-                headers:{'Content-Type': 'multipart/form-data'}
+                'Content-Type': 'multipart/form-data', withCredentials:true
             })
             .then((response)=>{
                 this.$emit('raiseError',response.data);

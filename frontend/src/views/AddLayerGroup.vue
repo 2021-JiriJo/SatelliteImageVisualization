@@ -49,11 +49,12 @@ export default {
     methods:{
         onSubmit(){      
             axios.post(`/users/${this.$store.getters.user_id}/layergroups/${this.layerGroupName}`, 
+
             {
                 layerGroupName: this.layerGroupName,
                 layerGroupDescription: this.layerGroupDescription,
                 visibility: this.visibility
-            })
+            }, {headers: {withCredentials:true}})
             .then((response)=>{
                 if(response.status != 200)
                     this.$emit('raiseError',response.data);

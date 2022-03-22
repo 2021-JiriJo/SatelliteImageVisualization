@@ -14,13 +14,15 @@
             >
                 <v-list-item 
                     v-for="item in items"
-                    :key="item"
+                    :key="`${item[0]}_${item[1]}`"
                     :value="item"
                 >
                     <v-list-item-content>
-                        <v-list-item-title v-text="item"></v-list-item-title>
-                    </v-list-item-content>
+                        <v-list-item-title v-text="item[0]"></v-list-item-title>
                         
+                        
+                    </v-list-item-content>
+                        <v-list-item-icon><v-list-item-subtitle v-text="item[1]"></v-list-item-subtitle></v-list-item-icon>
                 </v-list-item>
             </v-list-item-group>
             
@@ -60,7 +62,8 @@ export default ({
             this.$router.push({
                 name:'layers', 
                 params:{
-                    layergroup:this.selected_item
+                    user_id:this.selected_item[1],
+                    layergroup:this.selected_item[0]
                 }
             });
             

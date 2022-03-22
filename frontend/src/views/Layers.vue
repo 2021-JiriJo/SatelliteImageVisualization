@@ -43,7 +43,7 @@ import axios from 'axios';
 export default ({
     mounted(){
         axios({
-            url:`/users/${this.$store.getters.user_id}/layergroups/${this.$route.params.layergroup}/layers`,
+            url:`/users/${this.$route.params.user_id}/layergroups/${this.$route.params.layergroup}/layers`,
             headers:{withCredentials:true},
             method: 'get'
         }).then(res=>this.items=res.data);

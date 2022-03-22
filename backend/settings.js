@@ -21,7 +21,7 @@ app.use(session({
         resave: false,
         saveUninitialized: true,
         store: new FileStore(),
-        cookie: { secure: false, maxAge: 86400 }
+        cookie: { secure: false, maxAge: null }
 }));
 
 export default app;

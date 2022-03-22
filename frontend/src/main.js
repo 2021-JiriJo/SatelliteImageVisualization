@@ -7,14 +7,14 @@ import axios from 'axios';
 
 Vue.config.productionTip = false
 
-
-if(process.env.NODE_ENV == 'development'){
-  console.log("Vue Render On Devserver");
-  axios.defaults.baseURL = "http://localhost:3000/";
-}
-else{
-  axios.defaults.baseURL = "http://104.198.232.60:3000/";
-}
+axios.defaults.baseURL = "http://localhost:3000/";
+// if(process.env.NODE_ENV == 'development'){
+//   console.log("Vue Render On Devserver");
+//   axios.defaults.baseURL = "http://localhost:3000/";
+// }
+// else{
+//   axios.defaults.baseURL = "http://121.183.220.132:3000/";
+// }
 axios.defaults.withCredentials = true;
 
 new Vue({

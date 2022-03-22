@@ -24,12 +24,13 @@ router.post('/login', (req, res)=>{
                     const pw = crypto.pbkdf2Sync(req.body.password,'salt',103286,64,'sha512').toString('base64');
                     if(query_res.rows[0].password == pw){
                         
+                        req.session.user_id = query_res.rows[0].id;
+                        req.session.uuid = query_res.rows[0].user_id;
                         req.session.save(err=>{
-                            req.session.user_id = query_res.rows[0].id;
-                            req.session.uuid = query_res.rows[0].user_id;
                             if(err) throw err;
-                            res.send(query_res.rows[0].id);
-                        })
+                            console.log(req.session.user_id);
+                            res.send(req.session.user_id);
+                        });
                         
                     }
                     else{

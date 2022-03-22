@@ -161,7 +161,7 @@ router.post('/:layerName',
                 filename: function(req,file,cb){
                     const filenames = file.originalname.split('.');
                     const extension = filenames[filenames.length -  1];
-                    cb(null, file.path+'.'+extension);
+                    cb(null, `${req.session.uuid}_${req.body.layergroupName}_${req.body.layerName}`+'.'+extension);
                 }
             })
     }).fields([{name:'jsonFile'},{name:'pngFile'},{name:'extent'}]) ,
@@ -192,14 +192,6 @@ router.post('/:layerName',
             await connection.query('ROLLBACK');
             return res.sendStatus(500);
         }
-        resolve();
-        // let geojson = null;
-        // fs.readFile(req.files.pngFile[0].path, (err,data)=>{
-        //     fs.writeFile(`./tmp/${layerName}.png`,data, function(err,res){
-        //         if(err) console.log(err);
-        //         else console.log(res);
-        //     });
-        // })
 });
 
 
